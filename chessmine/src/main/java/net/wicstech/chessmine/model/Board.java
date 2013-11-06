@@ -71,6 +71,7 @@ public class Board {
 	 *         jogo.
 	 */
 	public boolean tryMoving(Point from, Point to) {
+		LOG.info("from: " + from + " to: " + to);
 		Piece piece = piecesOnBoard.get(from);
 		if (!piece.getBoardSide().equals(boardSidePlaying)) {
 			return false;
@@ -82,7 +83,6 @@ public class Board {
 			}
 			capturedPieces.add(pieceCaptured);
 			boardSidePlaying = boardSidePlaying.negate();
-			LOG.info("from: " + from + " to: " + to);
 			return true;
 		}
 		return false;
@@ -98,8 +98,7 @@ public class Board {
 	 * @return
 	 */
 	private Piece move(Point from, Point to, Piece piece, Map<Point, Piece> boardMap) {
-		Piece pieceCaptured = boardMap.get(to);
-		boardMap.remove(to);
+		Piece pieceCaptured = boardMap.remove(to);
 		boardMap.remove(from);
 		boardMap.put(to, piece);
 		piece.setCurrentPosition(to);
@@ -115,12 +114,29 @@ public class Board {
 	 * @return
 	 */
 	boolean kingsPlayerIsInCheck(Point from, Point to, Piece piece) {
-		Map<Point, Piece> testBoard = new HashMap<>(piecesOnBoard);
-		move(from, to, piece, testBoard);
-		boolean check = kingsPlayerIsInCheck(piece, testBoard);
-		// restaurar a posição.
-		piece.setCurrentPosition(from);
+		Piece capturado = move(from, to, piece, piecesOnBoard);
+		boolean check = kingsPlayerIsInCheck(piece);
+		undomove(from, to, piece, capturado);
+
 		return check;
+	}
+
+	/**
+	 * Desfazer o movimento realizado.
+	 * 
+	 * @param from
+	 * @param to
+	 * @param piece
+	 * @param capturado
+	 */
+	private void undomove(Point from, Point to, Piece piece, Piece capturado) {
+		// restaurar a posição.
+		piecesOnBoard.remove(to);
+		piecesOnBoard.put(from, piece);
+		if (capturado != null) {
+			piecesOnBoard.put(to, capturado);
+		}
+		piece.setCurrentPosition(from);
 	}
 
 	/**
@@ -128,14 +144,12 @@ public class Board {
 	 * se ficou, o movimento é inválido.
 	 * 
 	 * @param piece
-	 * @param testBoard
-	 *            tabuleiro com a simulação do movimento.
 	 * @return
 	 */
-	private boolean kingsPlayerIsInCheck(Piece piece, Map<Point, Piece> testBoard) {
-		List<King> kings = getPieces(King.class, piece.getBoardSide(), testBoard);
+	private boolean kingsPlayerIsInCheck(Piece piece) {
+		List<King> kings = getPieces(King.class, piece.getBoardSide());
 		King king = kings.get(NumberUtils.INTEGER_ZERO);
-		Collection<Piece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate(), testBoard);
+		Collection<Piece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate());
 		for (Piece pieceToBeTested : distinctPieces) {
 			if (king.isInCheck(pieceToBeTested)) {
 				return true;
@@ -149,12 +163,11 @@ public class Board {
 	 * tabuleiro.
 	 * 
 	 * @param boardSide
-	 * @param testBoard
 	 * @return
 	 */
-	private Collection<Piece> getDistinctPiecesOnBoard(BoardSide boardSide, Map<Point, Piece> testBoard) {
+	private Collection<Piece> getDistinctPiecesOnBoard(BoardSide boardSide) {
 		Map<Class<?>, Piece> distinctPieces = new HashMap<>();
-		for (Piece piece : testBoard.values()) {
+		for (Piece piece : piecesOnBoard.values()) {
 			if (piece.getBoardSide().equals(boardSide) && !distinctPieces.containsKey(piece.getClass())) {
 				distinctPieces.put(piece.getClass(), piece);
 			}
@@ -167,13 +180,12 @@ public class Board {
 	 * 
 	 * @param clazz
 	 * @param boardSide
-	 * @param testBoard
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private <T extends Piece> List<T> getPieces(Class<T> clazz, BoardSide boardSide, Map<Point, Piece> testBoard) {
+	private <T extends Piece> List<T> getPieces(Class<T> clazz, BoardSide boardSide) {
 		List<T> encontrados = new ArrayList<>();
-		Collection<? extends Piece> values = testBoard.values();
+		Collection<? extends Piece> values = piecesOnBoard.values();
 		for (Piece piece : values) {
 			if (clazz.isInstance(piece) && boardSide.equals(piece.getBoardSide())) {
 				encontrados.add((T) piece);

@@ -34,7 +34,7 @@ public class BoardTest {
 		// o jogador black moveu outro pião e deixou o rei descoberto
 		assertTrue(board.tryMoving(new Point(4, 1), new Point(4, 2)));
 
-		// o jogador white moveu sua rainha e deiou o rei em cheque
+		// o jogador white moveu sua rainha e deixou o rei em cheque
 		assertTrue(board.tryMoving(new Point(3, 7), new Point(0, 4)));
 
 		// tentar mover o cavalo não vai resolver a situação
@@ -46,7 +46,7 @@ public class BoardTest {
 
 		// Mas se colocar o pião na frente da rainha que está atacando, o rei
 		// sai do cheque e o movimento é válido.
-		assertTrue(board.tryMoving(new Point(2, 1), new Point(2, 3)));
+		assertTrue(board.tryMoving(new Point(2, 1), new Point(2, 2)));
 	}
 
 }
