@@ -25,9 +25,11 @@ public abstract class ApplicationControl {
 	 * @return
 	 */
 	public static Parent load(String fxmlFile) {
-		if (context == null) {
-			context = new ClassPathXmlApplicationContext("applicationContext.xml");
-			context.start();
+		synchronized (ApplicationControl.class) {
+			if (context == null) {
+				context = new ClassPathXmlApplicationContext("applicationContext.xml");
+				context.start();
+			}
 		}
 		URL resource = ApplicationControl.class.getResource("/fxml/" + fxmlFile);
 		try {

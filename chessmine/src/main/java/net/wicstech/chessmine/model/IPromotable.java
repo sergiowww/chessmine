@@ -12,6 +12,6 @@ import net.wicstech.chessmine.model.pieces.Piece;
  */
 public interface IPromotable<T extends Piece> {
 
-	public abstract T promoteTo();
+	T promoteTo();
 
 }

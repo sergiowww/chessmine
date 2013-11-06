@@ -34,6 +34,23 @@ class PieceNode {
 	private Black black;
 	private White white;
 
+	public PieceNode() {
+		super();
+	}
+
+	public PieceNode(Piece piece) {
+		super();
+		this.type = PieceTypeFactory.getType(piece.getClass()).ordinal();
+		this.line = piece.getCurrentPosition().y + 1;
+		this.col = piece.getCurrentPosition().x + 1;
+		if (piece.getBoardSide().equals(BoardSide.BLACK)) {
+			black = new Black();
+		} else {
+			white = new White();
+		}
+
+	}
+
 	/**
 	 * Instancia a peça com os dados.
 	 * 

@@ -1,6 +1,7 @@
 package net.wicstech.chessmine.model;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.xml.bind.JAXBException;
 
-import net.wicstech.chessmine.model.piecefactory.PieceLoader;
+import net.wicstech.chessmine.model.piecefactory.BoardConfigXML;
 import net.wicstech.chessmine.model.pieces.King;
 import net.wicstech.chessmine.model.pieces.Piece;
 
@@ -30,7 +32,7 @@ public class Board {
 	private static final Log LOG = LogFactory.getLog(Board.class);
 
 	@Autowired
-	private PieceLoader pieceLoader;
+	private BoardConfigXML boardConfigXML;
 
 	private Map<Point, Piece> piecesOnBoard = new HashMap<>();
 
@@ -54,7 +56,7 @@ public class Board {
 	 */
 	@PostConstruct
 	public void initialSetup() {
-		List<Piece> pieces = pieceLoader.getPiecesInitial();
+		List<Piece> pieces = boardConfigXML.getPiecesInitial();
 		for (Piece piece : pieces) {
 			piece.setBoard(this);
 			piecesOnBoard.put(piece.getCurrentPosition(), piece);
@@ -71,7 +73,6 @@ public class Board {
 	 *         jogo.
 	 */
 	public boolean tryMoving(Point from, Point to) {
-		LOG.info("from: " + from + " to: " + to);
 		Piece piece = piecesOnBoard.get(from);
 		if (!piece.getBoardSide().equals(boardSidePlaying)) {
 			return false;
@@ -83,6 +84,7 @@ public class Board {
 			}
 			capturedPieces.add(pieceCaptured);
 			boardSidePlaying = boardSidePlaying.negate();
+			LOG.info("from: " + from + " to: " + to);
 			return true;
 		}
 		return false;
@@ -117,7 +119,9 @@ public class Board {
 		Piece capturado = move(from, to, piece, piecesOnBoard);
 		boolean check = kingsPlayerIsInCheck(piece);
 		undomove(from, to, piece, capturado);
-
+		if (check) {
+			LOG.info("Rei em cheque");
+		}
 		return check;
 	}
 
@@ -196,12 +200,21 @@ public class Board {
 
 	/**
 	 * Promover o pião se estiver na última casa, null se não puder ser
-	 * promovido TODO falta implementar
+	 * promovido
 	 * 
 	 * @param lastPosition
 	 * @return
 	 */
 	public Piece promote(Point lastPosition) {
+		Piece piece = piecesOnBoard.get(lastPosition);
+		if (piece instanceof IPromotable<?>) {
+			Piece promoted = ((IPromotable<?>) piece).promoteTo();
+			if (promoted != null) {
+				piecesOnBoard.remove(lastPosition);
+				piecesOnBoard.put(lastPosition, promoted);
+			}
+			return promoted;
+		}
 		return null;
 	}
 
@@ -277,5 +290,17 @@ public class Board {
 	 */
 	public BoardSide getBoardSidePlaying() {
 		return boardSidePlaying;
+	}
+
+	/**
+	 * Salvar peças do tabuleiro.
+	 * 
+	 * @return
+	 * 
+	 * @throws IOException
+	 * @throws JAXBException
+	 */
+	public String salvar() throws JAXBException, IOException {
+		return boardConfigXML.savePieces(piecesOnBoard.values());
 	}
 }
