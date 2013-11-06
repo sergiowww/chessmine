@@ -4,10 +4,29 @@ import java.awt.Point;
 
 import junit.framework.Assert;
 import net.wicstech.chessmine.model.Board;
+import net.wicstech.chessmine.model.BoardSide;
 
 import org.junit.Test;
 
 public class KingTest {
+
+	@Test
+	public void testIsInCheck() {
+		Board board = new Board();
+
+		King king = new King();
+		king.setBoardSide(BoardSide.BLACK);
+		king.setBoard(board);
+		king.setCurrentPosition(new Point(5, 6));
+
+		Knight knight = new Knight();
+		knight.setBoard(board);
+		knight.setBoardSide(BoardSide.WHITE);
+
+		board.getPiecesOnBoard().put(new Point(4, 4), knight);
+
+		Assert.assertEquals(true, king.isInCheck(knight));
+	}
 
 	@Test
 	public void testAcceptMove() {

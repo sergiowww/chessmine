@@ -40,18 +40,13 @@
         <Menu mnemonicParsing="false" text="Arquivo">
           <items>
             <MenuItem mnemonicParsing="false" onAction="#novoJogo" text="Novo jogo" />
-            <MenuItem mnemonicParsing="false" text="Salvar" />
+            <MenuItem mnemonicParsing="false" onAction="#salvarJogo" text="Salvar" />
             <MenuItem mnemonicParsing="false" onAction="#sair" text="Sair" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Opções">
-          <items>
-            <CheckMenuItem mnemonicParsing="false" text="Jogar contra o computador" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Ajuda">
           <items>
-            <MenuItem mnemonicParsing="false" text="Sobre" />
+            <MenuItem mnemonicParsing="false" onAction="#sobre" text="Sobre" />
           </items>
         </Menu>
       </menus>

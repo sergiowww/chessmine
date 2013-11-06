@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.MoveAction;
 
 /**
@@ -16,8 +17,13 @@ public class Knight extends Piece {
 
 	@Override
 	public boolean acceptMove(Point newPosition) {
+		List<Point> points = possibleMoves(getCurrentPosition(), getBoardSide());
+		return points.contains(newPosition);
+	}
+
+	@Override
+	public List<Point> possibleMoves(Point c, BoardSide boardSide) {
 		List<Point> points = new ArrayList<>();
-		Point c = getCurrentPosition();
 		points.add(new Point(c.x - 2, c.y - 1));
 		points.add(new Point(c.x - 2, c.y + 1));
 		points.add(new Point(c.x + 2, c.y + 1));
@@ -28,17 +34,11 @@ public class Knight extends Piece {
 		points.add(new Point(c.x - 1, c.y + 2));
 		for (int index = points.size() - 1; index >= 0; index--) {
 			Point point = points.get(index);
-			if (MoveAction.STOP.equals(getBoard().canItMoveTo(point, getBoardSide()))) {
+			if (MoveAction.STOP.equals(getBoard().canItMoveTo(point, boardSide))) {
 				points.remove(index);
 			}
 		}
-		return points.contains(newPosition);
-	}
-
-	@Override
-	public List<Point> possibleMoves(Point givenPoint) {
-		// TODO Auto-generated method stub
-		return null;
+		return points;
 	}
 
 }

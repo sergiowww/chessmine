@@ -7,16 +7,29 @@ package net.wicstech.chessmine.model;
  * 
  */
 public enum BoardSide {
-	BLACK("-fx-background-color: brown;", Orientation.FORTH),
+	BLACK("-fx-background-color: brown;", Orientation.FORTH, 7),
 
-	WHITE("-fx-background-color: white;", Orientation.BACK);
+	WHITE("-fx-background-color: white;", Orientation.BACK, 0);
 
+	/**
+	 * Cor do fundo das peças deste lado.
+	 */
 	private String backgroundColor;
+
+	/**
+	 * Direção do ataque das peças que estão deste lado.
+	 */
 	private Orientation orientation;
 
-	private BoardSide(String backgroundColor, Orientation orientation) {
+	/**
+	 * Última casa que as peças deste lado tendem a ir.
+	 */
+	private int ultimaCasa;
+
+	private BoardSide(String backgroundColor, Orientation orientation, int ultimaCasa) {
 		this.backgroundColor = backgroundColor;
 		this.orientation = orientation;
+		this.ultimaCasa = ultimaCasa;
 	}
 
 	/**
@@ -45,5 +58,12 @@ public enum BoardSide {
 	 */
 	public Orientation orientation() {
 		return orientation;
+	}
+
+	/**
+	 * @return the ultimaCasa
+	 */
+	public int ultimaCasa() {
+		return ultimaCasa;
 	}
 }
