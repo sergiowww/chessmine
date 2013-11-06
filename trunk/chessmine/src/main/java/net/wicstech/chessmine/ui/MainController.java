@@ -91,4 +91,18 @@ public class MainController implements Initializable {
 		fadeTransition.setToValue(1.0);
 		fadeTransition.play();
 	}
+
+	/**
+	 * Salvar posição das peças.
+	 */
+	public void salvarJogo() {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * Informações sobre o jogo.
+	 */
+	public void sobre() {
+		painelMensagem.setText("ChessMine 2013 wicstech.net - Sergio Eduardo D Oliveira");
+	}
 }

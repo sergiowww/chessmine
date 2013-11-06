@@ -2,6 +2,7 @@ package net.wicstech.chessmine.model;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,12 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import net.wicstech.chessmine.model.piecefactory.PieceLoader;
+import net.wicstech.chessmine.model.pieces.King;
 import net.wicstech.chessmine.model.pieces.Piece;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +27,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class Board {
+	private static final Log LOG = LogFactory.getLog(Board.class);
 
 	@Autowired
 	private PieceLoader pieceLoader;
 
 	private Map<Point, Piece> piecesOnBoard = new HashMap<>();
+
+	/**
+	 * Peças capturadas.
+	 */
 	private List<Piece> capturedPieces = new ArrayList<>();
+
+	/**
+	 * Lado que tem a vez de jogar.
+	 */
 	private BoardSide boardSidePlaying = BoardSide.BLACK;
 
 	/**
@@ -62,25 +75,119 @@ public class Board {
 		if (!piece.getBoardSide().equals(boardSidePlaying)) {
 			return false;
 		}
-		if (piece.acceptMove(to)) {
-			Piece pieceCaptured = piecesOnBoard.get(to);
-			piecesOnBoard.remove(to);
-			piecesOnBoard.remove(from);
-			piecesOnBoard.put(to, piece);
-			piece.setCurrentPosition(to);
+		if (piece.acceptMove(to) && !kingsPlayerIsInCheck(from, to, piece)) {
+			Piece pieceCaptured = move(from, to, piece, piecesOnBoard);
 			if (piece instanceof IUpdateTimesMoved) {
 				((IUpdateTimesMoved) piece).moved();
 			}
 			capturedPieces.add(pieceCaptured);
 			boardSidePlaying = boardSidePlaying.negate();
+			LOG.info("from: " + from + " to: " + to);
 			return true;
 		}
 		return false;
 	}
 
 	/**
+	 * Realizar o movimento pedido.
+	 * 
+	 * @param from
+	 * @param to
+	 * @param piece
+	 * @param boardMap
+	 * @return
+	 */
+	private Piece move(Point from, Point to, Piece piece, Map<Point, Piece> boardMap) {
+		Piece pieceCaptured = boardMap.get(to);
+		boardMap.remove(to);
+		boardMap.remove(from);
+		boardMap.put(to, piece);
+		piece.setCurrentPosition(to);
+		return pieceCaptured;
+	}
+
+	/**
+	 * Verifica se o rei do jogador que terminou a jogada está em cheque.
+	 * 
+	 * @param from
+	 * @param to
+	 * @param piece
+	 * @return
+	 */
+	boolean kingsPlayerIsInCheck(Point from, Point to, Piece piece) {
+		Map<Point, Piece> testBoard = new HashMap<>(piecesOnBoard);
+		move(from, to, piece, testBoard);
+		boolean check = kingsPlayerIsInCheck(piece, testBoard);
+		// restaurar a posição.
+		piece.setCurrentPosition(from);
+		return check;
+	}
+
+	/**
+	 * Checa se o após o movimento, o rei do jogador corrente ficou em cheque,
+	 * se ficou, o movimento é inválido.
+	 * 
+	 * @param piece
+	 * @param testBoard
+	 *            tabuleiro com a simulação do movimento.
+	 * @return
+	 */
+	private boolean kingsPlayerIsInCheck(Piece piece, Map<Point, Piece> testBoard) {
+		List<King> kings = getPieces(King.class, piece.getBoardSide(), testBoard);
+		King king = kings.get(NumberUtils.INTEGER_ZERO);
+		Collection<Piece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate(), testBoard);
+		for (Piece pieceToBeTested : distinctPieces) {
+			if (king.isInCheck(pieceToBeTested)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Retorna uma peça de cada tipo do boardSide informado constantes no
+	 * tabuleiro.
+	 * 
+	 * @param boardSide
+	 * @param testBoard
+	 * @return
+	 */
+	private Collection<Piece> getDistinctPiecesOnBoard(BoardSide boardSide, Map<Point, Piece> testBoard) {
+		Map<Class<?>, Piece> distinctPieces = new HashMap<>();
+		for (Piece piece : testBoard.values()) {
+			if (piece.getBoardSide().equals(boardSide) && !distinctPieces.containsKey(piece.getClass())) {
+				distinctPieces.put(piece.getClass(), piece);
+			}
+		}
+		return distinctPieces.values();
+	}
+
+	/**
+	 * Buscar peças no tabuleiro do tipo informado.
+	 * 
+	 * @param clazz
+	 * @param boardSide
+	 * @param testBoard
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private <T extends Piece> List<T> getPieces(Class<T> clazz, BoardSide boardSide, Map<Point, Piece> testBoard) {
+		List<T> encontrados = new ArrayList<>();
+		Collection<? extends Piece> values = testBoard.values();
+		for (Piece piece : values) {
+			if (clazz.isInstance(piece) && boardSide.equals(piece.getBoardSide())) {
+				encontrados.add((T) piece);
+			}
+		}
+		return encontrados;
+	}
+
+	/**
 	 * Promover o pião se estiver na última casa, null se não puder ser
-	 * promovido
+	 * promovido TODO falta implementar
+	 * 
+	 * @param lastPosition
+	 * @return
 	 */
 	public Piece promote(Point lastPosition) {
 		return null;

@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.Direction;
 import net.wicstech.chessmine.model.Orientation;
 
@@ -18,18 +19,17 @@ public class Bishop extends Piece {
 
 	@Override
 	public boolean acceptMove(Point newPosition) {
-		List<Point> possibleMoves = new ArrayList<>();
-		possibleMoves.addAll(moveBias(Orientation.BACK, Direction.LEFT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(Orientation.BACK, Direction.RIGHT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(Orientation.FORTH, Direction.RIGHT, Integer.MAX_VALUE));
-		return possibleMoves.contains(newPosition);
+		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);
 	}
 
 	@Override
-	public List<Point> possibleMoves(Point givenPoint) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Point> possibleMoves(Point givenPoint, BoardSide boardSide) {
+		List<Point> possibleMoves = new ArrayList<>();
+		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.LEFT, Integer.MAX_VALUE));
+		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.RIGHT, Integer.MAX_VALUE));
+		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
+		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.RIGHT, Integer.MAX_VALUE));
+		return possibleMoves;
 	}
 
 }

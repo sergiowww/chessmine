@@ -33,13 +33,20 @@ public abstract class Piece implements Serializable {
 
 	/**
 	 * Aceita ou não o movimento realizado pelo usuário.
+	 * 
+	 * @param newPosition
+	 * @return
 	 */
 	public abstract boolean acceptMove(Point newPosition);
 
 	/**
 	 * Retorna a coordenada dos possíveis movimentos a partir do ponto atual
+	 * 
+	 * @param givenPoint
+	 * @param boardSide
+	 * @return
 	 */
-	public abstract List<Point> possibleMoves(Point givenPoint);
+	public abstract List<Point> possibleMoves(Point givenPoint, BoardSide boardSide);
 
 	/**
 	 * Retorna o nome do ícone.
@@ -55,43 +62,49 @@ public abstract class Piece implements Serializable {
 	/**
 	 * Mover-se na horizontal, ou para os lados.
 	 * 
+	 * @param givenPoint
+	 * @param givenBoardSide
 	 * @param direction
 	 * @param squares
 	 * @return
 	 */
-	protected List<Point> moveHorizontally(Direction direction, int squares) {
+	protected List<Point> moveHorizontally(Point givenPoint, BoardSide givenBoardSide, Direction direction, int squares) {
 		WalkDirection walkDirection = new WalkDirection(direction);
-		return executeStrategy(squares, walkDirection);
+		return executeStrategy(givenPoint, givenBoardSide, squares, walkDirection);
 	}
 
 	/**
 	 * Mover verticalmente - para baixo ou para cima.
 	 * 
+	 * @param givenPosition
+	 * @param givenBoardSide
 	 * @param orientation
 	 * @param squares
 	 * @return
 	 */
-	protected List<Point> moveVertically(Orientation orientation, int squares) {
+	protected List<Point> moveVertically(Point givenPosition, BoardSide givenBoardSide, Orientation orientation, int squares) {
 		WalkOrientation walkOrientation = new WalkOrientation(orientation);
-		return executeStrategy(squares, walkOrientation);
+		return executeStrategy(givenPosition, givenBoardSide, squares, walkOrientation);
 	}
 
 	/**
 	 * Executar a estratégia para andar as casas no tabuleiro.
 	 * 
+	 * @param givenPosition
+	 * @param givenBoardSide
 	 * @param squares
 	 * @param walks
 	 * @return
 	 */
-	private List<Point> executeStrategy(int squares, IWalk... walks) {
-		Point point = currentPosition.getLocation();
+	private List<Point> executeStrategy(Point givenPosition, BoardSide givenBoardSide, int squares, IWalk... walks) {
+		Point point = givenPosition.getLocation();
 		List<Point> points = new ArrayList<>();
 		MoveAction legalMove = MoveAction.STOP;
 		do {
 			for (IWalk iWalk : walks) {
 				iWalk.walk(point);
 			}
-			legalMove = board.canItMoveTo(point, boardSide);
+			legalMove = board.canItMoveTo(point, givenBoardSide);
 			if (TIPOS_VALIDOS.contains(legalMove)) {
 				points.add(point);
 			}
@@ -104,15 +117,17 @@ public abstract class Piece implements Serializable {
 	/**
 	 * Mover diagonalmente.
 	 * 
+	 * @param givenPosition
+	 * @param givenBoardSide
 	 * @param orientation
 	 * @param direction
 	 * @param squares
 	 * @return
 	 */
-	protected List<Point> moveBias(Orientation orientation, Direction direction, int squares) {
+	protected List<Point> moveBias(Point givenPosition, BoardSide givenBoardSide, Orientation orientation, Direction direction, int squares) {
 		WalkDirection walkDirection = new WalkDirection(direction);
 		WalkOrientation walkOrientation = new WalkOrientation(orientation);
-		return executeStrategy(squares, walkDirection, walkOrientation);
+		return executeStrategy(givenPosition, givenBoardSide, squares, walkDirection, walkOrientation);
 	}
 
 	/**

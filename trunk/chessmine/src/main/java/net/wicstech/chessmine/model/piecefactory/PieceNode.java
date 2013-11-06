@@ -40,7 +40,7 @@ class PieceNode {
 	 * @return
 	 */
 	public Piece getPiece() {
-		Piece piece = PieceType.newInstance(type);
+		Piece piece = PieceTypeFactory.newInstance(type);
 		piece.setCurrentPosition(PointFactory.newPoint(col - 1, line - 1));
 		if (black != null) {
 			piece.setBoardSide(BoardSide.BLACK);

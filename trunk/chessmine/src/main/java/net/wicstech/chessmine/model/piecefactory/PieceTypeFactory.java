@@ -16,7 +16,7 @@ import org.springframework.cglib.core.ReflectUtils;
  * @author Sergio
  * 
  */
-enum PieceType {
+public enum PieceTypeFactory {
 	EMPTY(null),
 
 	PAWN(Pawn.class),
@@ -38,7 +38,7 @@ enum PieceType {
 	 * 
 	 * @param pieceClass
 	 */
-	private <T extends Piece> PieceType(Class<T> pieceClass) {
+	private <T extends Piece> PieceTypeFactory(Class<T> pieceClass) {
 		this.pieceClass = pieceClass;
 	}
 
@@ -49,8 +49,23 @@ enum PieceType {
 	 * @return
 	 */
 	public static <T extends Piece> T newInstance(int type) {
-		PieceType pieceType = values()[type];
+		PieceTypeFactory pieceType = values()[type];
 		return pieceType.newInstance();
+	}
+
+	/**
+	 * Cria uma nova peça.
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public static <T extends Piece> T newInstance(Class<T> clazz) {
+		for (PieceTypeFactory pieceType : values()) {
+			if (clazz.equals(pieceType.pieceClass)) {
+				return pieceType.newInstance();
+			}
+		}
+		return null;
 	}
 
 	/**
