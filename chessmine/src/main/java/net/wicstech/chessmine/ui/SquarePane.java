@@ -6,6 +6,7 @@ import java.util.Map;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -24,10 +25,14 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 public class SquarePane extends TilePane {
-
 	private Point squarePosition;
+	private Board board;
+	private Map<Point, SquarePane> indicePaineis;
+	private Label painelMensagem;
 
-	public SquarePane(boolean alternarCorFundo, final Map<Point, SquarePane> indicePaineis, final Board board) {
+	public SquarePane(boolean alternarCorFundo, Map<Point, SquarePane> indicePaineis, Board board) {
+		this.indicePaineis = indicePaineis;
+		this.board = board;
 		setStyle(BooleanUtils.toString(alternarCorFundo, BoardSide.WHITE.color(), BoardSide.BLACK.color()));
 		setOrientation(Orientation.HORIZONTAL);
 		setAlignment(Pos.CENTER);
@@ -46,16 +51,29 @@ public class SquarePane extends TilePane {
 
 			@Override
 			public void handle(DragEvent event) {
-				Dragboard dragboard = event.getDragboard();
-				Piece piece = (Piece) dragboard.getContent(UIConstants.CHESS_PIECE_VIEW);
-				if (board.tryMoving(piece.getCurrentPosition(), squarePosition)) {
-					SquarePane quadradoOrigem = indicePaineis.get(piece.getCurrentPosition());
-					PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
-					quadradoOrigem.getChildren().remove(pieceViewOrigem);
-					setPieceView(pieceViewOrigem);
-				}
+				droppedPiece(event);
 			}
+
 		});
+	}
+
+	private void droppedPiece(DragEvent event) {
+		Dragboard dragboard = event.getDragboard();
+		Piece piece = (Piece) dragboard.getContent(UIConstants.CHESS_PIECE_VIEW);
+		boolean procceedMove = board.tryMoving(piece.getCurrentPosition(), squarePosition);
+		if (procceedMove) {
+			SquarePane quadradoOrigem = indicePaineis.get(piece.getCurrentPosition());
+			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
+			quadradoOrigem.getChildren().remove(pieceViewOrigem);
+			setPieceView(pieceViewOrigem);
+			painelMensagem.setText(getMensagemAguardando());
+		} else {
+			painelMensagem.setText("Movimento inválido!");
+		}
+	}
+
+	private String getMensagemAguardando() {
+		return "Aguardando jogador " + board.getBoardSidePlaying().name() + " executar um movimento.";
 	}
 
 	/**
@@ -83,5 +101,14 @@ public class SquarePane extends TilePane {
 	 */
 	public void setSquarePosition(Point squarePosition) {
 		this.squarePosition = squarePosition;
+	}
+
+	/**
+	 * @param painelMensagem
+	 *            the painelMensagem to set
+	 */
+	public void setPainelMensagem(Label painelMensagem) {
+		this.painelMensagem = painelMensagem;
+		this.painelMensagem.setText(getMensagemAguardando());
 	}
 }

@@ -5,9 +5,12 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import net.wicstech.chessmine.model.Board;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -30,6 +33,9 @@ public class MainController implements Initializable {
 	@FXML
 	private GridPane gameBoard;
 
+	@FXML
+	private Label painelMensagem;
+
 	@Autowired
 	private Board board;
 
@@ -47,7 +53,7 @@ public class MainController implements Initializable {
 		synchronized (board) {
 			if (!board.isConfigured()) {
 				BoardSetup boardSetup = new BoardSetup(gameBoard, board);
-				squarePositions = boardSetup.setupSquares();
+				squarePositions = boardSetup.setupSquares(painelMensagem);
 				boardSetup.allocatePiecesOnBoard(board.getPiecesOnBoard(), squarePositions);
 				board.setConfigured(true);
 			}
@@ -68,8 +74,21 @@ public class MainController implements Initializable {
 	 */
 	public void novoJogo() {
 		LOG.info("Reiniciando tabuleiro");
+
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000));
+		fadeTransition.setFromValue(1.0f);
+		fadeTransition.setToValue(0.0);
+		fadeTransition.setNode(gameBoard);
+		fadeTransition.play();
+
 		gameBoard.getChildren().clear();
 		board.reiniciar();
 		inicializar();
+
+		fadeTransition = new FadeTransition(Duration.millis(1000));
+		fadeTransition.setFromValue(0);
+		fadeTransition.setNode(gameBoard);
+		fadeTransition.setToValue(1.0);
+		fadeTransition.play();
 	}
 }

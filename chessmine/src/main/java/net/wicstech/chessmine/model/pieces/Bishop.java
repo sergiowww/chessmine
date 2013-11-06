@@ -20,8 +20,8 @@ public class Bishop extends Piece {
 	public boolean acceptMove(Point newPosition) {
 		List<Point> possibleMoves = new ArrayList<>();
 		possibleMoves.addAll(moveBias(Orientation.BACK, Direction.LEFT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
 		possibleMoves.addAll(moveBias(Orientation.BACK, Direction.RIGHT, Integer.MAX_VALUE));
+		possibleMoves.addAll(moveBias(Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
 		possibleMoves.addAll(moveBias(Orientation.FORTH, Direction.RIGHT, Integer.MAX_VALUE));
 		return possibleMoves.contains(newPosition);
 	}

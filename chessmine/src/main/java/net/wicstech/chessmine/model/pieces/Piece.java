@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import net.wicstech.chessmine.model.Board;
@@ -21,11 +20,16 @@ import net.wicstech.chessmine.model.Orientation;
  */
 public abstract class Piece implements Serializable {
 	private static final long serialVersionUID = 6058030896941443816L;
-	private static final List<MoveAction> TIPOS_VALIDOS = Arrays.asList(MoveAction.MOVE, MoveAction.MOVE_AND_STOP);
+	private static final List<MoveAction> TIPOS_VALIDOS = Arrays.asList(MoveAction.MOVE, MoveAction.MOVE_AND_ATTACK);
 
 	private Point currentPosition;
 	private BoardSide boardSide;
-	private Board board;
+
+	/**
+	 * O recurso de drag and drop serializa o objeto {@link Piece}, mas não é
+	 * necessário serializar o tabuleiro.
+	 */
+	private transient Board board;
 
 	/**
 	 * Aceita ou não o movimento realizado pelo usuário.
@@ -49,17 +53,52 @@ public abstract class Piece implements Serializable {
 	}
 
 	/**
-	 * Mover horizontalmente
+	 * Mover-se na horizontal, ou para os lados.
+	 * 
+	 * @param direction
+	 * @param squares
+	 * @return
 	 */
-	protected List<Point> moveHorizontally(Direction side, int squares) {
-		return null;
+	protected List<Point> moveHorizontally(Direction direction, int squares) {
+		WalkDirection walkDirection = new WalkDirection(direction);
+		return executeStrategy(squares, walkDirection);
 	}
 
 	/**
-	 * Mover verticalmente
+	 * Mover verticalmente - para baixo ou para cima.
+	 * 
+	 * @param orientation
+	 * @param squares
+	 * @return
 	 */
-	protected List<Point> moveVertically(Orientation direction, int squares) {
-		return Collections.emptyList();
+	protected List<Point> moveVertically(Orientation orientation, int squares) {
+		WalkOrientation walkOrientation = new WalkOrientation(orientation);
+		return executeStrategy(squares, walkOrientation);
+	}
+
+	/**
+	 * Executar a estratégia para andar as casas no tabuleiro.
+	 * 
+	 * @param squares
+	 * @param walks
+	 * @return
+	 */
+	private List<Point> executeStrategy(int squares, IWalk... walks) {
+		Point point = currentPosition.getLocation();
+		List<Point> points = new ArrayList<>();
+		MoveAction legalMove = MoveAction.STOP;
+		do {
+			for (IWalk iWalk : walks) {
+				iWalk.walk(point);
+			}
+			legalMove = board.canItMoveTo(point, boardSide);
+			if (TIPOS_VALIDOS.contains(legalMove)) {
+				points.add(point);
+			}
+			point = point.getLocation();
+		} while (legalMove.equals(MoveAction.MOVE) && points.size() < squares);
+
+		return points;
 	}
 
 	/**
@@ -71,30 +110,9 @@ public abstract class Piece implements Serializable {
 	 * @return
 	 */
 	protected List<Point> moveBias(Orientation orientation, Direction direction, int squares) {
-		Point point = currentPosition.getLocation();
-		List<Point> points = new ArrayList<>();
-		MoveAction legalMove = MoveAction.STOP;
-		do {
-			if (Direction.LEFT.equals(direction)) {
-				point.x--;
-			}
-			if (Direction.RIGHT.equals(direction)) {
-				point.x++;
-			}
-			if (Orientation.BACK.equals(orientation)) {
-				point.y--;
-			}
-			if (Orientation.FORTH.equals(orientation)) {
-				point.y++;
-			}
-			legalMove = board.canItMoveTo(point, boardSide);
-			if (TIPOS_VALIDOS.contains(legalMove)) {
-				points.add(point);
-			}
-			point = point.getLocation();
-		} while (legalMove.equals(MoveAction.MOVE) && points.size() < squares);
-
-		return points;
+		WalkDirection walkDirection = new WalkDirection(direction);
+		WalkOrientation walkOrientation = new WalkOrientation(orientation);
+		return executeStrategy(squares, walkDirection, walkOrientation);
 	}
 
 	/**
@@ -182,4 +200,61 @@ public abstract class Piece implements Serializable {
 		return board;
 	}
 
+	/**
+	 * Strategy - Walk direction behavior.
+	 * 
+	 * @author Sergio
+	 * 
+	 */
+	private interface IWalk {
+		void walk(Point point);
+	}
+
+	/**
+	 * Caminhar na orientação frente ou trás.
+	 * 
+	 * @author Sergio
+	 * 
+	 */
+	private class WalkOrientation implements IWalk {
+		private Orientation orientation;
+
+		public WalkOrientation(Orientation orientation) {
+			this.orientation = orientation;
+		}
+
+		@Override
+		public void walk(Point point) {
+			if (Orientation.BACK.equals(orientation)) {
+				point.y--;
+			}
+			if (Orientation.FORTH.equals(orientation)) {
+				point.y++;
+			}
+		}
+	}
+
+	/**
+	 * Caminhar na direção esquerda ou direita.
+	 * 
+	 * @author Sergio
+	 * 
+	 */
+	private class WalkDirection implements IWalk {
+		private Direction direction;
+
+		public WalkDirection(Direction direction) {
+			this.direction = direction;
+		}
+
+		@Override
+		public void walk(Point point) {
+			if (Direction.LEFT.equals(direction)) {
+				point.x--;
+			}
+			if (Direction.RIGHT.equals(direction)) {
+				point.x++;
+			}
+		}
+	}
 }

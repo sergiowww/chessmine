@@ -3,12 +3,14 @@ package net.wicstech.chessmine.ui;
 import java.io.InputStream;
 
 import javafx.event.EventHandler;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
 import net.wicstech.chessmine.model.pieces.Piece;
 
 /**
@@ -25,6 +27,7 @@ public class PieceView extends ImageView {
 		Image image = new Image(input, 0, 50, true, true);
 		setImage(image);
 		setPreserveRatio(true);
+		setEffect(new DropShadow(4, Color.BLACK));
 
 		setOnDragDetected(new EventHandler<MouseEvent>() {
 

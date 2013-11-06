@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.Constants;
@@ -35,10 +36,10 @@ public class BoardSetup {
 	/**
 	 * Preencher quadrados com cores alternadas.
 	 * 
-	 * @param gameBoard
+	 * @param painelMensagem
 	 * @return
 	 */
-	public Map<Point, SquarePane> setupSquares() {
+	public Map<Point, SquarePane> setupSquares(Label painelMensagem) {
 		Map<Point, SquarePane> indicePaineis = new HashMap<>();
 		int totalColunas = Constants.TOTAL_COLUNAS;
 		boolean alternarCorFundo = true;
@@ -46,6 +47,7 @@ public class BoardSetup {
 			alternarCorFundo = !alternarCorFundo;
 			for (int j = 0; j < totalColunas; j++) {
 				SquarePane pane = new SquarePane(alternarCorFundo, indicePaineis, board);
+				pane.setPainelMensagem(painelMensagem);
 				Point point = PointFactory.newPoint(i, j);
 				pane.setSquarePosition(point);
 				indicePaineis.put(point, pane);
@@ -56,20 +58,18 @@ public class BoardSetup {
 		return indicePaineis;
 	}
 
+	/**
+	 * Alocar as peças do xadrês no tabuleiro.
+	 * 
+	 * @param piecesOnBoard
+	 * @param squarePositions
+	 */
 	public void allocatePiecesOnBoard(Map<Point, Piece> piecesOnBoard, Map<Point, SquarePane> squarePositions) {
 		for (Piece piece : piecesOnBoard.values()) {
 			PieceView pieceView = new PieceView(piece);
 			SquarePane pane = squarePositions.get(piece.getCurrentPosition());
 			pane.setPieceView(pieceView);
 		}
-	}
-
-	/**
-	 * @param gameBoard
-	 *            the gameBoard to set
-	 */
-	public void setGameBoard(GridPane gameBoard) {
-		this.gameBoard = gameBoard;
 	}
 
 }
