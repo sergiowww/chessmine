@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import net.wicstech.chessmine.model.piecefactory.PieceLoader;
 import net.wicstech.chessmine.model.pieces.Piece;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class Board {
 
 	private Map<Point, Piece> piecesOnBoard = new HashMap<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
+	private BoardSide boardSidePlaying = BoardSide.BLACK;
 
 	/**
 	 * Indica se houve a configuração inicial.
@@ -57,13 +59,20 @@ public class Board {
 	 */
 	public boolean tryMoving(Point from, Point to) {
 		Piece piece = piecesOnBoard.get(from);
+		if (!piece.getBoardSide().equals(boardSidePlaying)) {
+			return false;
+		}
 		if (piece.acceptMove(to)) {
 			Piece pieceCaptured = piecesOnBoard.get(to);
 			piecesOnBoard.remove(to);
 			piecesOnBoard.remove(from);
 			piecesOnBoard.put(to, piece);
 			piece.setCurrentPosition(to);
+			if (piece instanceof IUpdateTimesMoved) {
+				((IUpdateTimesMoved) piece).moved();
+			}
 			capturedPieces.add(pieceCaptured);
+			boardSidePlaying = boardSidePlaying.negate();
 			return true;
 		}
 		return false;
@@ -125,7 +134,7 @@ public class Board {
 		}
 		BoardSide checkSide = boardSide.negate();
 		if (piecesOnBoard.get(point).getBoardSide().equals(checkSide)) {
-			return MoveAction.MOVE_AND_STOP;
+			return MoveAction.MOVE_AND_ATTACK;
 		}
 		return MoveAction.STOP;
 	}
@@ -137,6 +146,17 @@ public class Board {
 	 * @return
 	 */
 	private boolean isValidPosition(Point point) {
-		return point.x < Constants.TOTAL_COLUNAS && point.y < Constants.TOTAL_COLUNAS;
+		boolean xMaiorIgualZero = point.x >= NumberUtils.INTEGER_ZERO;
+		boolean yMaiorIgualZero = point.y >= NumberUtils.INTEGER_ZERO;
+		boolean xMenorQueOito = point.x < Constants.TOTAL_COLUNAS;
+		boolean yMenorQueOito = point.y < Constants.TOTAL_COLUNAS;
+		return xMaiorIgualZero && xMenorQueOito && yMenorQueOito && yMaiorIgualZero;
+	}
+
+	/**
+	 * @return the boardSidePlaying
+	 */
+	public BoardSide getBoardSidePlaying() {
+		return boardSidePlaying;
 	}
 }

@@ -7,7 +7,10 @@ package net.wicstech.chessmine.model;
  * 
  */
 public enum BoardSide {
-	BLACK("-fx-background-color: brown;", Orientation.BACK), WHITE("-fx-background-color: white;", Orientation.FORTH);
+	BLACK("-fx-background-color: brown;", Orientation.FORTH),
+
+	WHITE("-fx-background-color: white;", Orientation.BACK);
+
 	private String backgroundColor;
 	private Orientation orientation;
 
