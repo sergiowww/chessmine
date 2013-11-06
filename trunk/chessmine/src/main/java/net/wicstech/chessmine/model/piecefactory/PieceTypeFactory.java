@@ -48,7 +48,7 @@ public enum PieceTypeFactory {
 	 * @param type
 	 * @return
 	 */
-	public static <T extends Piece> T newInstance(int type) {
+	static <T extends Piece> T newInstance(int type) {
 		PieceTypeFactory pieceType = values()[type];
 		return pieceType.newInstance();
 	}
@@ -63,6 +63,21 @@ public enum PieceTypeFactory {
 		for (PieceTypeFactory pieceType : values()) {
 			if (clazz.equals(pieceType.pieceClass)) {
 				return pieceType.newInstance();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Tipo da peça pela classe.
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public static PieceTypeFactory getType(Class<? extends Piece> clazz) {
+		for (PieceTypeFactory type : values()) {
+			if (clazz == type.pieceClass) {
+				return type;
 			}
 		}
 		return null;

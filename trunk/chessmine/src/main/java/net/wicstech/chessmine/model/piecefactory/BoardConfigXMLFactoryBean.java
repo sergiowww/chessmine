@@ -7,6 +7,8 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,26 +18,27 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-public class PieceLoaderFactoryBean implements FactoryBean<PieceLoader> {
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "prototype")
+public class BoardConfigXMLFactoryBean implements FactoryBean<BoardConfigXML> {
 	@Override
-	public PieceLoader getObject() throws Exception {
-		JAXBContext context = JAXBContext.newInstance(PieceLoader.class);
+	public BoardConfigXML getObject() throws Exception {
+		JAXBContext context = JAXBContext.newInstance(BoardConfigXML.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 
 		XMLInputFactory xif = XMLInputFactory.newFactory();
 		xif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		XMLStreamReader xsr = xif.createXMLStreamReader(new StreamSource(PieceLoader.class.getResourceAsStream("/board_state.xml")));
-		return (PieceLoader) unmarshaller.unmarshal(xsr);
+		XMLStreamReader xsr = xif.createXMLStreamReader(new StreamSource(BoardConfigXML.class.getResourceAsStream("/board_state.xml")));
+		return (BoardConfigXML) unmarshaller.unmarshal(xsr);
 	}
 
 	@Override
 	public Class<?> getObjectType() {
-		return PieceLoader.class;
+		return BoardConfigXML.class;
 	}
 
 	@Override
 	public boolean isSingleton() {
-		return true;
+		return false;
 	}
 
 }

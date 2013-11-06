@@ -1,6 +1,7 @@
 package net.wicstech.chessmine.ui;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -11,6 +12,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
+
+import javax.xml.bind.JAXBException;
+
 import net.wicstech.chessmine.model.Board;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -94,9 +98,13 @@ public class MainController implements Initializable {
 
 	/**
 	 * Salvar posição das peças.
+	 * 
+	 * @throws IOException
+	 * @throws JAXBException
 	 */
-	public void salvarJogo() {
-		// TODO Auto-generated method stub
+	public void salvarJogo() throws JAXBException, IOException {
+		String fileName = board.salvar();
+		painelMensagem.setText("Configuração das peças gravada em " + fileName);
 	}
 
 	/**

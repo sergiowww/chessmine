@@ -29,6 +29,7 @@ public class Pawn extends Piece implements IPromotable<Queen>, IUpdateTimesMoved
 			Queen queen = PieceTypeFactory.newInstance(Queen.class);
 			queen.setCurrentPosition(getCurrentPosition());
 			queen.setBoardSide(getBoardSide());
+			queen.setBoard(getBoard());
 			return queen;
 		}
 		return null;

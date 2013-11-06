@@ -65,10 +65,19 @@ public class SquarePane extends TilePane {
 			SquarePane quadradoOrigem = indicePaineis.get(piece.getCurrentPosition());
 			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
 			quadradoOrigem.getChildren().remove(pieceViewOrigem);
-			setPieceView(pieceViewOrigem);
 			painelMensagem.setText(getMensagemAguardando());
+			setOrPromotePieceView(pieceViewOrigem);
 		} else {
 			painelMensagem.setText("Movimento inválido!");
+		}
+	}
+
+	private void setOrPromotePieceView(PieceView pieceViewOrigem) {
+		Piece newPiece = board.promote(squarePosition);
+		if (newPiece != null) {
+			setPieceView(new PieceView(newPiece));
+		} else {
+			setPieceView(pieceViewOrigem);
 		}
 	}
 
