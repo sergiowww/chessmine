@@ -102,4 +102,9 @@
 			<version>3.2.4.RELEASE</version>
 		</dependency>
 	</dependencies>
+	<url>wicstech.net</url>
+	<scm>
+		<developerConnection>http://br.linkedin.com/in/sergioeduardo</developerConnection>
+		<url>https://code.google.com/p/chessmine/</url>
+	</scm>
 </project>

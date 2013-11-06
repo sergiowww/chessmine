@@ -243,6 +243,9 @@ public class Board {
 		return piecesOnBoard;
 	}
 
+	/**
+	 * Reiniciar o jogo.
+	 */
 	public void reiniciar() {
 		piecesOnBoard.clear();
 		capturedPieces.clear();
