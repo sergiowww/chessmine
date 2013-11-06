@@ -34,6 +34,9 @@ public class Board {
 	@Autowired
 	private BoardConfigXML boardConfigXML;
 
+	/**
+	 * Tabuleiro de peças indexado pela coordenada.
+	 */
 	private Map<Point, Piece> piecesOnBoard = new HashMap<>();
 
 	/**
