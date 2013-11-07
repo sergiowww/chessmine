@@ -1,8 +1,10 @@
 package net.wicstech.chessmine;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +33,13 @@ public class ApplicationEntryPoint extends Application {
 		primaryStage.setMinWidth(500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+
+			@Override
+			public void handle(WindowEvent arg0) {
+				ApplicationControl.stop();
+			}
+		});
 	}
 
 }

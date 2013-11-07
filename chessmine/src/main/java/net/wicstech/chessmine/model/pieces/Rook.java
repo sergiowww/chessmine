@@ -17,6 +17,13 @@ import net.wicstech.chessmine.model.Orientation;
 public class Rook extends Piece {
 	private static final long serialVersionUID = -251879153705382657L;
 
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Rook() {
+		super();
+	}
+
 	@Override
 	public boolean acceptMove(Point newPosition) {
 		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);

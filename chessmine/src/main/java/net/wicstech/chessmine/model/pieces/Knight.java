@@ -15,6 +15,13 @@ import net.wicstech.chessmine.model.MoveAction;
 public class Knight extends Piece {
 	private static final long serialVersionUID = 8949299390635327820L;
 
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Knight() {
+		super();
+	}
+
 	@Override
 	public boolean acceptMove(Point newPosition) {
 		List<Point> points = possibleMoves(getCurrentPosition(), getBoardSide());

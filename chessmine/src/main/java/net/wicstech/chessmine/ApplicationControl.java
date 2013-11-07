@@ -22,6 +22,7 @@ public abstract class ApplicationControl {
 	 * Carregar fxml.
 	 * 
 	 * @param fxmlFile
+	 * @param primaryStage
 	 * @return
 	 */
 	public static Parent load(String fxmlFile) {
@@ -39,6 +40,14 @@ public abstract class ApplicationControl {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * Parar contexto spring.
+	 */
+	public static void stop() {
+		context.stop();
+		context.destroy();
 	}
 
 }
