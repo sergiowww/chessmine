@@ -42,7 +42,7 @@ public class SquarePane extends TilePane {
 			@Override
 			public void handle(DragEvent event) {
 				Dragboard db = event.getDragboard();
-				if (db.hasContent(UIConstants.CHESS_PIECE_VIEW)) {
+				if (db.hasContent(UIConstants.POINT_CURRENT_POSITION)) {
 					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 				}
 			}
@@ -59,10 +59,10 @@ public class SquarePane extends TilePane {
 
 	private void droppedPiece(DragEvent event) {
 		Dragboard dragboard = event.getDragboard();
-		Piece piece = (Piece) dragboard.getContent(UIConstants.CHESS_PIECE_VIEW);
-		boolean procceedMove = board.tryMoving(piece.getCurrentPosition(), squarePosition);
+		Point currentPosition = (Point) dragboard.getContent(UIConstants.POINT_CURRENT_POSITION);
+		boolean procceedMove = board.tryMoving(currentPosition, squarePosition);
 		if (procceedMove) {
-			SquarePane quadradoOrigem = indicePaineis.get(piece.getCurrentPosition());
+			SquarePane quadradoOrigem = indicePaineis.get(currentPosition);
 			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
 			quadradoOrigem.getChildren().remove(pieceViewOrigem);
 			painelMensagem.setText(getMensagemAguardando());

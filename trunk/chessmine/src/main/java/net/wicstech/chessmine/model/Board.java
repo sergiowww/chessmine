@@ -1,6 +1,7 @@
 package net.wicstech.chessmine.model;
 
 import java.awt.Point;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +12,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 
-import net.wicstech.chessmine.model.piecefactory.BoardConfigXML;
+import net.wicstech.chessmine.model.boardstate.BoardResultXML;
+import net.wicstech.chessmine.model.boardstate.BoardStateXML;
 import net.wicstech.chessmine.model.pieces.King;
 import net.wicstech.chessmine.model.pieces.Piece;
 
@@ -32,7 +34,10 @@ public class Board {
 	private static final Log LOG = LogFactory.getLog(Board.class);
 
 	@Autowired
-	private BoardConfigXML boardConfigXML;
+	private BoardStateXML boardConfigXML;
+
+	@Autowired
+	private BoardResultXML boardResultXML;
 
 	/**
 	 * Tabuleiro de peças indexado pela coordenada.
@@ -61,7 +66,6 @@ public class Board {
 	public void initialSetup() {
 		List<Piece> pieces = boardConfigXML.getPiecesInitial();
 		for (Piece piece : pieces) {
-			piece.setBoard(this);
 			piecesOnBoard.put(piece.getCurrentPosition(), piece);
 		}
 	}
@@ -301,12 +305,14 @@ public class Board {
 	/**
 	 * Salvar peças do tabuleiro.
 	 * 
+	 * @param arquivoDestino
+	 * 
 	 * @return
 	 * 
 	 * @throws IOException
 	 * @throws JAXBException
 	 */
-	public String salvar() throws JAXBException, IOException {
-		return boardConfigXML.savePieces(piecesOnBoard.values());
+	public String salvar(File arquivoDestino) throws JAXBException, IOException {
+		return boardResultXML.savePieces(piecesOnBoard.values(), arquivoDestino);
 	}
 }

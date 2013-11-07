@@ -20,6 +20,13 @@ import org.apache.commons.lang.math.NumberUtils;
 public class King extends Piece {
 	private static final long serialVersionUID = -7098370625157522187L;
 
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	King() {
+		super();
+	}
+
 	@Override
 	public boolean acceptMove(Point newPosition) {
 		List<Point> points = possibleMoves(getCurrentPosition(), getBoardSide());

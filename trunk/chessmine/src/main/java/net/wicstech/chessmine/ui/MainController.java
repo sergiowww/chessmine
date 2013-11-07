@@ -1,23 +1,27 @@
 package net.wicstech.chessmine.ui;
 
 import java.awt.Point;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 import javax.xml.bind.JAXBException;
 
 import net.wicstech.chessmine.model.Board;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +74,7 @@ public class MainController implements Initializable {
 	public void sair() {
 		context.stop();
 		context.destroy();
-		System.exit(NumberUtils.INTEGER_ZERO);
+		Platform.exit();
 	}
 
 	/**
@@ -103,8 +107,25 @@ public class MainController implements Initializable {
 	 * @throws JAXBException
 	 */
 	public void salvarJogo() throws JAXBException, IOException {
-		String fileName = board.salvar();
-		painelMensagem.setText("Configuração das peças gravada em " + fileName);
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Escolha onde salvar o arquivo");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML File", "*.xml"));
+		fileChooser.setInitialFileName("board_result.xml");
+		fileChooser.setInitialDirectory(SystemUtils.getUserHome());
+		File file = fileChooser.showSaveDialog(getWindow());
+		if (file != null) {
+			String fileName = board.salvar(file);
+			painelMensagem.setText("Configuração das peças gravada em " + fileName);
+		}
+	}
+
+	/**
+	 * Instância da janela.
+	 * 
+	 * @return
+	 */
+	private Window getWindow() {
+		return gameBoard.getScene().getWindow();
 	}
 
 	/**
@@ -113,4 +134,5 @@ public class MainController implements Initializable {
 	public void sobre() {
 		painelMensagem.setText("ChessMine 2013 wicstech.net - Sergio Eduardo D Oliveira");
 	}
+
 }

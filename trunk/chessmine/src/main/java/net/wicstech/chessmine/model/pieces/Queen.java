@@ -17,6 +17,13 @@ import net.wicstech.chessmine.model.Orientation;
 public class Queen extends Piece {
 	private static final long serialVersionUID = 4817619455656435077L;
 
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Queen() {
+		super();
+	}
+
 	@Override
 	public boolean acceptMove(Point newPosition) {
 		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);

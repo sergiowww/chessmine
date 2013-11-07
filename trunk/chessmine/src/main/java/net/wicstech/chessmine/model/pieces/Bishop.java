@@ -17,6 +17,13 @@ import net.wicstech.chessmine.model.Orientation;
 public class Bishop extends Piece {
 	private static final long serialVersionUID = 5443101730149654318L;
 
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Bishop() {
+		super();
+	}
+
 	@Override
 	public boolean acceptMove(Point newPosition) {
 		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);

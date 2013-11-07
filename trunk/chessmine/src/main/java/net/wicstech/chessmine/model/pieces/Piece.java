@@ -12,6 +12,8 @@ import net.wicstech.chessmine.model.Direction;
 import net.wicstech.chessmine.model.MoveAction;
 import net.wicstech.chessmine.model.Orientation;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Peça genérica.
  * 
@@ -24,12 +26,21 @@ public abstract class Piece implements Serializable {
 
 	private Point currentPosition;
 	private BoardSide boardSide;
+	private String pieceIdXML;
 
 	/**
 	 * O recurso de drag and drop serializa o objeto {@link Piece}, mas não é
 	 * necessário serializar o tabuleiro.
 	 */
+	@Autowired
 	private transient Board board;
+
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Piece() {
+		super();
+	}
 
 	/**
 	 * Aceita ou não o movimento realizado pelo usuário.
@@ -271,5 +282,20 @@ public abstract class Piece implements Serializable {
 				point.x++;
 			}
 		}
+	}
+
+	/**
+	 * @return the pieceIdXML
+	 */
+	public String getPieceIdXML() {
+		return pieceIdXML;
+	}
+
+	/**
+	 * @param pieceIdXML
+	 *            the pieceId to set
+	 */
+	public void setPieceIdXML(String pieceIdXML) {
+		this.pieceIdXML = pieceIdXML;
 	}
 }

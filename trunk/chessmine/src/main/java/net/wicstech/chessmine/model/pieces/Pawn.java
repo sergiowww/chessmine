@@ -8,9 +8,9 @@ import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.Direction;
 import net.wicstech.chessmine.model.IPromotable;
 import net.wicstech.chessmine.model.IUpdateTimesMoved;
-import net.wicstech.chessmine.model.piecefactory.PieceTypeFactory;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Pião.
@@ -23,13 +23,22 @@ public class Pawn extends Piece implements IPromotable<Queen>, IUpdateTimesMoved
 	private static final long serialVersionUID = 6214561026158689018L;
 	private boolean firstMove = true;
 
+	@Autowired
+	private transient PieceFactory pieceFactory;
+
+	/**
+	 * Construtor de visibilidade padrão.
+	 */
+	Pawn() {
+		super();
+	}
+
 	@Override
 	public Queen promoteTo() {
 		if (getCurrentPosition().y == getBoardSide().ultimaCasa()) {
-			Queen queen = PieceTypeFactory.newInstance(Queen.class);
+			Queen queen = pieceFactory.newInstance(Queen.class);
 			queen.setCurrentPosition(getCurrentPosition());
 			queen.setBoardSide(getBoardSide());
-			queen.setBoard(getBoard());
 			return queen;
 		}
 		return null;

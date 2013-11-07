@@ -9,5 +9,5 @@ import javafx.scene.input.DataFormat;
  * 
  */
 public interface UIConstants {
-	DataFormat CHESS_PIECE_VIEW = new DataFormat("chess.piece.view");
+	DataFormat POINT_CURRENT_POSITION = new DataFormat("chess.piece.view");
 }
