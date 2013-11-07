@@ -53,10 +53,10 @@ public class King extends Piece {
 			Map<Point, Piece> piecesOnBoard = getBoard().getPiecesOnBoard();
 			// Existe uma peça nesta posição
 			if (piecesOnBoard.containsKey(point)) {
-				Piece pieceAttacking = piecesOnBoard.get(point);
+				Piece attackingPiece = piecesOnBoard.get(point);
 				// Se a peça que estou testando, está de fato na posição de
 				// ataque e ela pertence ao outro lado
-				if (pieceAttacking.getClass() == piece.getClass() && !pieceAttacking.getBoardSide().equals(getBoardSide())) {
+				if (attackingPiece.getClass() == piece.getClass() && !attackingPiece.getBoardSide().equals(getBoardSide())) {
 					// Este rei está em cheque
 					return true;
 				}
