@@ -18,7 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Sergio
  * 
  */
-public class Pawn extends Piece implements IPromotable<Queen>, IUpdateTimesMoved {
+@SuppressWarnings("PMD.ShortClassName")
+public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTimesMoved {
 	private static final int MOVIMENTO_MAX_INICIAL = 2;
 	private static final long serialVersionUID = 6214561026158689018L;
 	private boolean firstMove = true;
@@ -82,7 +83,7 @@ public class Pawn extends Piece implements IPromotable<Queen>, IUpdateTimesMoved
 	private Point getAttackMove(BoardSide boardSide, Direction direction, Point pos) {
 		Point point = moveBias(boardSide, direction, pos);
 		if (point != null) {
-			Piece attackedPiece = getBoard().getPiecesOnBoard().get(point);
+			AbstractPiece attackedPiece = getBoard().getPiecesOnBoard().get(point);
 			if (attackedPiece != null && attackedPiece.getBoardSide().equals(boardSide.negate())) {
 				return point;
 			}

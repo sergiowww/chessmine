@@ -14,7 +14,8 @@ import net.wicstech.chessmine.model.Orientation;
  * @author Sergio
  * 
  */
-public class Rook extends Piece {
+@SuppressWarnings("PMD.ShortClassName")
+public class Rook extends AbstractPiece {
 	private static final long serialVersionUID = -251879153705382657L;
 
 	/**

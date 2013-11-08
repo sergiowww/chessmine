@@ -6,6 +6,10 @@ package net.wicstech.chessmine.model;
  * @author Sergio
  * 
  */
-public interface Constants {
-	int TOTAL_COLUNAS = 8;
+public final class Constants {
+	public static final int TOTAL_COLUNAS = 8;
+
+	private Constants() {
+		super();
+	}
 }

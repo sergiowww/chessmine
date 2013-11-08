@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
  * 
  */
 final class SpringControllerFactory implements Callback<Class<?>, Object> {
-	private ApplicationContext context;
+	private final ApplicationContext context;
 
 	public SpringControllerFactory(ApplicationContext context) {
 		this.context = context;

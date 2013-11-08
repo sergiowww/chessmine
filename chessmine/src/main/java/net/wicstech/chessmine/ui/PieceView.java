@@ -9,7 +9,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 /**
  * Visualização da peça.
@@ -19,7 +19,8 @@ import net.wicstech.chessmine.model.pieces.Piece;
  */
 public class PieceView extends ImageView {
 
-	public PieceView(final Piece piece) {
+	public PieceView(final AbstractPiece piece) {
+		super();
 		String icone = "/images/" + piece.getIconName() + ".png";
 		InputStream input = getClass().getResourceAsStream(icone);
 		Image image = new Image(input, 0, 50, true, true);
@@ -30,10 +31,10 @@ public class PieceView extends ImageView {
 
 			@Override
 			public void handle(MouseEvent event) {
-				Dragboard db = startDragAndDrop(TransferMode.COPY_OR_MOVE);
+				Dragboard dragBoard = startDragAndDrop(TransferMode.COPY_OR_MOVE);
 				ClipboardContent clipboardContent = new ClipboardContent();
 				clipboardContent.put(UIConstants.POINT_CURRENT_POSITION, piece.getCurrentPosition());
-				db.setContent(clipboardContent);
+				dragBoard.setContent(clipboardContent);
 				event.consume();
 			}
 		});

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.PointFactory;
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.PieceFactory;
 
 /**
@@ -19,7 +19,7 @@ import net.wicstech.chessmine.model.pieces.PieceFactory;
 @XmlAccessorType(XmlAccessType.FIELD)
 class PieceNode {
 	@XmlAttribute(name = "id")
-	private String id;
+	private String pieceId;
 
 	@XmlElement(name = "type")
 	private int type;
@@ -31,10 +31,10 @@ class PieceNode {
 	private int col;
 
 	@XmlElement(name = "black")
-	private Black black;
+	private String black;
 
 	@XmlElement(name = "white")
-	private White white;
+	private String white;
 
 	/**
 	 * Instancia a peça com os dados.
@@ -43,9 +43,9 @@ class PieceNode {
 	 * 
 	 * @return
 	 */
-	public Piece getPiece(PieceFactory pieceFactory) {
-		Piece piece = pieceFactory.newInstance(type);
-		piece.setPieceIdXML(id);
+	public AbstractPiece getPiece(PieceFactory pieceFactory) {
+		AbstractPiece piece = pieceFactory.newInstance(type);
+		piece.setPieceIdXML(pieceId);
 		piece.setCurrentPosition(PointFactory.newPoint(col - 1, line - 1));
 		if (black != null) {
 			piece.setBoardSide(BoardSide.BLACK);

@@ -12,12 +12,13 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 import org.springframework.stereotype.Service;
 
 @Service
 @XmlRootElement(name = "board_result")
+@SuppressWarnings("PMD.SingularField")
 public class BoardResultXML {
 
 	@XmlElement(name = "square")
@@ -32,9 +33,10 @@ public class BoardResultXML {
 	 * @throws JAXBException
 	 * @throws IOException
 	 */
-	public String savePieces(Collection<Piece> values, File arquivoDestino) throws JAXBException, IOException {
+	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+	public String savePieces(Collection<AbstractPiece> values, File arquivoDestino) throws JAXBException, IOException {
 		this.squareNodes = new ArrayList<>();
-		for (Piece piece : values) {
+		for (AbstractPiece piece : values) {
 			this.squareNodes.add(new SquareNode(piece));
 		}
 		JAXBContext jaxb = JAXBContext.newInstance(BoardResultXML.class);

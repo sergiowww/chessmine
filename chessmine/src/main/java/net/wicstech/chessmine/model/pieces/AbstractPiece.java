@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Sergio
  * 
  */
-public abstract class Piece implements Serializable {
+public abstract class AbstractPiece implements Serializable {
 	private static final long serialVersionUID = 6058030896941443816L;
 	private static final List<MoveAction> TIPOS_VALIDOS = Arrays.asList(MoveAction.MOVE, MoveAction.MOVE_AND_ATTACK);
 
@@ -29,7 +29,7 @@ public abstract class Piece implements Serializable {
 	private String pieceIdXML;
 
 	/**
-	 * O recurso de drag and drop serializa o objeto {@link Piece}, mas não é
+	 * O recurso de drag and drop serializa o objeto {@link AbstractPiece}, mas não é
 	 * necessário serializar o tabuleiro.
 	 */
 	@Autowired
@@ -38,7 +38,7 @@ public abstract class Piece implements Serializable {
 	/**
 	 * Construtor de visibilidade padrão.
 	 */
-	Piece() {
+	AbstractPiece() {
 		super();
 	}
 
@@ -163,7 +163,7 @@ public abstract class Piece implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
+		int prime = 31;
 		int result = 1;
 		result = prime * result + ((currentPosition == null) ? 0 : currentPosition.hashCode());
 		return result;
@@ -182,10 +182,10 @@ public abstract class Piece implements Serializable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Piece)) {
+		if (!(obj instanceof AbstractPiece)) {
 			return false;
 		}
-		Piece other = (Piece) obj;
+		AbstractPiece other = (AbstractPiece) obj;
 		if (currentPosition == null) {
 			if (other.currentPosition != null) {
 				return false;
@@ -243,7 +243,7 @@ public abstract class Piece implements Serializable {
 	 * 
 	 */
 	private class WalkOrientation implements IWalk {
-		private Orientation orientation;
+		private final Orientation orientation;
 
 		public WalkOrientation(Orientation orientation) {
 			this.orientation = orientation;
@@ -267,7 +267,7 @@ public abstract class Piece implements Serializable {
 	 * 
 	 */
 	private class WalkDirection implements IWalk {
-		private Direction direction;
+		private final Direction direction;
 
 		public WalkDirection(Direction direction) {
 			this.direction = direction;

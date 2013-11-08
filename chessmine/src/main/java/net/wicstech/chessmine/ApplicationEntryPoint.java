@@ -1,5 +1,7 @@
 package net.wicstech.chessmine;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -23,7 +25,7 @@ public class ApplicationEntryPoint extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws IOException {
 		LOG.info("Iniciando aplicação...");
 		Scene scene = new Scene(ApplicationControl.load("MainLayout.fxml"));
 		primaryStage.setTitle("Chess Mine");

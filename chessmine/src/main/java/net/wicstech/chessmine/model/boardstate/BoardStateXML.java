@@ -6,7 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.PieceFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,8 @@ public class BoardStateXML {
 	 * 
 	 * @return
 	 */
-	public List<Piece> getPiecesInitial() {
-		List<Piece> pieces = new ArrayList<>();
+	public List<AbstractPiece> getPiecesInitial() {
+		List<AbstractPiece> pieces = new ArrayList<>();
 		for (PieceNode pieceNode : pieceNodes) {
 			pieces.add(pieceNode.getPiece(pieceFactory));
 		}

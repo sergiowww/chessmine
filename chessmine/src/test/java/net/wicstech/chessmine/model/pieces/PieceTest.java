@@ -18,7 +18,7 @@ public class PieceTest {
 	@Test
 	public void testMoveBiasForthLeftMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.BLACK);
 		Point beingAttacked = new Point(2, 4);
@@ -38,7 +38,7 @@ public class PieceTest {
 	@Test
 	public void testMoveBiasForthRightMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.WHITE);
 		Point beingAttacked = new Point(5, 3);
@@ -58,7 +58,7 @@ public class PieceTest {
 	@Test
 	public void testMoveBiasBackLeftMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.BLACK);
 		Point beingAttacked = new Point(1, 3);
@@ -80,7 +80,7 @@ public class PieceTest {
 	@Test
 	public void testMoveBiasBackLeftMaxSameOpponent() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.BLACK);
 		Point beingAttacked = new Point(1, 3);
@@ -101,7 +101,7 @@ public class PieceTest {
 	@Test
 	public void testMoveBiasBackRightMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.BLACK);
 		Point beingAttacked = new Point(6, 4);
@@ -122,7 +122,7 @@ public class PieceTest {
 	@Test
 	public void testMoveVerticallyBackMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.BLACK);
 		Point beingAttacked = new Point(4, 2);
@@ -145,7 +145,7 @@ public class PieceTest {
 	@Test
 	public void testMoveHorizontallyLeft() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.WHITE);
 		Point beingAttacked = new Point(4, 7);
@@ -167,7 +167,7 @@ public class PieceTest {
 	@Test
 	public void testMoveHorizontallyRight() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.WHITE);
 		Point beingAttacked = new Point(4, 5);
@@ -187,7 +187,7 @@ public class PieceTest {
 	@Test
 	public void testMoveVerticallyForthMax() {
 		Board board = new Board();
-		Map<Point, Piece> pieces = board.getPiecesOnBoard();
+		Map<Point, AbstractPiece> pieces = board.getPiecesOnBoard();
 		Bishop bishop = new Bishop();
 		bishop.setBoardSide(BoardSide.WHITE);
 		Point beingAttacked = new Point(1, 4);

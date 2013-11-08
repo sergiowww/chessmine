@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.Constants;
 import net.wicstech.chessmine.model.PointFactory;
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 /**
  * Construir os quadrados de cores alternadas, onde as peças serão alocadas.
@@ -18,8 +18,8 @@ import net.wicstech.chessmine.model.pieces.Piece;
  * 
  */
 public class BoardSetup {
-	private GridPane gameBoard;
-	private Board board;
+	private final GridPane gameBoard;
+	private final Board board;
 
 	/**
 	 * Construtor.
@@ -39,6 +39,7 @@ public class BoardSetup {
 	 * @param painelMensagem
 	 * @return
 	 */
+	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 	public Map<Point, SquarePane> setupSquares(Label painelMensagem) {
 		Map<Point, SquarePane> indicePaineis = new HashMap<>();
 		int totalColunas = Constants.TOTAL_COLUNAS;
@@ -46,10 +47,9 @@ public class BoardSetup {
 		for (int i = 0; i < totalColunas; i++) {
 			alternarCorFundo = !alternarCorFundo;
 			for (int j = 0; j < totalColunas; j++) {
-				SquarePane pane = new SquarePane(alternarCorFundo, indicePaineis, board);
-				pane.setPainelMensagem(painelMensagem);
 				Point point = PointFactory.newPoint(i, j);
-				pane.setSquarePosition(point);
+				SquarePane pane = new SquarePane(alternarCorFundo, indicePaineis, board, point);
+				pane.setPainelMensagem(painelMensagem);
 				indicePaineis.put(point, pane);
 				gameBoard.add(pane, i, j);
 				alternarCorFundo = !alternarCorFundo;
@@ -64,8 +64,9 @@ public class BoardSetup {
 	 * @param piecesOnBoard
 	 * @param squarePositions
 	 */
-	public void allocatePiecesOnBoard(Map<Point, Piece> piecesOnBoard, Map<Point, SquarePane> squarePositions) {
-		for (Piece piece : piecesOnBoard.values()) {
+	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+	public void allocatePiecesOnBoard(Map<Point, AbstractPiece> piecesOnBoard, Map<Point, SquarePane> squarePositions) {
+		for (AbstractPiece piece : piecesOnBoard.values()) {
 			PieceView pieceView = new PieceView(piece);
 			SquarePane pane = squarePositions.get(piece.getCurrentPosition());
 			pane.setPieceView(pieceView);

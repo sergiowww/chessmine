@@ -1,9 +1,0 @@
-<!ELEMENT board_result (square+)>
-
-<!ELEMENT square (pieceId, line, col, (white|black|none))>
-<!ELEMENT pieceId (#PCDATA)>
-<!ELEMENT line (#PCDATA)>
-<!ELEMENT col (#PCDATA)>
-<!ELEMENT white EMPTY>
-<!ELEMENT black EMPTY>
-<!ELEMENT none EMPTY>
