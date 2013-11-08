@@ -22,7 +22,7 @@ public class PieceFactory {
 	 * @param clazz
 	 * @return
 	 */
-	public <T extends Piece> T newInstance(Class<T> clazz) {
+	public <T extends AbstractPiece> T newInstance(Class<T> clazz) {
 		for (PieceType pieceType : PieceType.values()) {
 			if (clazz.equals(pieceType.getPieceClass())) {
 				T piece = pieceType.newInstance();
@@ -33,7 +33,7 @@ public class PieceFactory {
 		return null;
 	}
 
-	private <T extends Piece> void autowirePiece(T piece) {
+	private <T extends AbstractPiece> void autowirePiece(T piece) {
 		context.getAutowireCapableBeanFactory().autowireBean(piece);
 	}
 
@@ -43,7 +43,7 @@ public class PieceFactory {
 	 * @param type
 	 * @return
 	 */
-	public <T extends Piece> T newInstance(int type) {
+	public <T extends AbstractPiece> T newInstance(int type) {
 		PieceType pieceType = PieceType.values()[type];
 		T piece = pieceType.newInstance();
 		autowirePiece(piece);

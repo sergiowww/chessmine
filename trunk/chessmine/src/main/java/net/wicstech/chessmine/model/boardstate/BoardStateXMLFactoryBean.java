@@ -1,8 +1,10 @@
 package net.wicstech.chessmine.model.boardstate;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
 
@@ -26,7 +28,7 @@ public class BoardStateXMLFactoryBean implements FactoryBean<BoardStateXML>, App
 	private ApplicationContext applicationContext;
 
 	@Override
-	public BoardStateXML getObject() throws Exception {
+	public BoardStateXML getObject() throws JAXBException, XMLStreamException {
 		JAXBContext context = JAXBContext.newInstance(BoardStateXML.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 

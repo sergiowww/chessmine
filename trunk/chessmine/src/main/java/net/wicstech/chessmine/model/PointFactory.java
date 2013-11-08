@@ -8,7 +8,11 @@ import java.awt.Point;
  * @author Sergio
  * 
  */
-public class PointFactory {
+public final class PointFactory {
+
+	private PointFactory() {
+		super();
+	}
 
 	/**
 	 * Traduz um new point.

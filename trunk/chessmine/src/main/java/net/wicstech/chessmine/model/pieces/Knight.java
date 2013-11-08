@@ -12,7 +12,7 @@ import net.wicstech.chessmine.model.MoveAction;
  * Possible Moves: (x-1, y-2) (x-2, y-1) (x-2, y+1) (x-1, y+2) (x+1, y+2) (x+2,
  * y+1) (x+2, y-1) (x+1, y-2)
  */
-public class Knight extends Piece {
+public class Knight extends AbstractPiece {
 	private static final long serialVersionUID = 8949299390635327820L;
 
 	/**
@@ -29,16 +29,16 @@ public class Knight extends Piece {
 	}
 
 	@Override
-	public List<Point> possibleMoves(Point c, BoardSide boardSide) {
+	public List<Point> possibleMoves(Point position, BoardSide boardSide) {
 		List<Point> points = new ArrayList<>();
-		points.add(new Point(c.x - 2, c.y - 1));
-		points.add(new Point(c.x - 2, c.y + 1));
-		points.add(new Point(c.x + 2, c.y + 1));
-		points.add(new Point(c.x + 2, c.y - 1));
-		points.add(new Point(c.x + 1, c.y + 2));
-		points.add(new Point(c.x + 1, c.y - 2));
-		points.add(new Point(c.x - 1, c.y - 2));
-		points.add(new Point(c.x - 1, c.y + 2));
+		points.add(new Point(position.x - 2, position.y - 1));
+		points.add(new Point(position.x - 2, position.y + 1));
+		points.add(new Point(position.x + 2, position.y + 1));
+		points.add(new Point(position.x + 2, position.y - 1));
+		points.add(new Point(position.x + 1, position.y + 2));
+		points.add(new Point(position.x + 1, position.y - 2));
+		points.add(new Point(position.x - 1, position.y - 2));
+		points.add(new Point(position.x - 1, position.y + 2));
 		for (int index = points.size() - 1; index >= 0; index--) {
 			Point point = points.get(index);
 			if (MoveAction.STOP.equals(getBoard().canItMoveTo(point, boardSide))) {

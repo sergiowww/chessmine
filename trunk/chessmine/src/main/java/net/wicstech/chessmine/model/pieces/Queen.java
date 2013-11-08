@@ -14,7 +14,7 @@ import net.wicstech.chessmine.model.Orientation;
  * @author Sergio
  * 
  */
-public class Queen extends Piece {
+public class Queen extends AbstractPiece {
 	private static final long serialVersionUID = 4817619455656435077L;
 
 	/**

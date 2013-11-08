@@ -17,7 +17,8 @@ import org.apache.commons.lang.math.NumberUtils;
  * @author Sergio
  * 
  */
-public class King extends Piece {
+@SuppressWarnings("PMD.ShortClassName")
+public class King extends AbstractPiece {
 	private static final long serialVersionUID = -7098370625157522187L;
 
 	/**
@@ -54,13 +55,13 @@ public class King extends Piece {
 	 * @param piece
 	 * @return
 	 */
-	public boolean isInCheck(Piece piece) {
+	public boolean isInCheck(AbstractPiece piece) {
 		List<Point> possibleMoves = piece.possibleMoves(getCurrentPosition(), getBoardSide());
 		for (Point point : possibleMoves) {
-			Map<Point, Piece> piecesOnBoard = getBoard().getPiecesOnBoard();
+			Map<Point, AbstractPiece> piecesOnBoard = getBoard().getPiecesOnBoard();
 			// Existe uma peça nesta posição
 			if (piecesOnBoard.containsKey(point)) {
-				Piece attackingPiece = piecesOnBoard.get(point);
+				AbstractPiece attackingPiece = piecesOnBoard.get(point);
 				// Se a peça que estou testando, está de fato na posição de
 				// ataque e ela pertence ao outro lado
 				if (attackingPiece.getClass() == piece.getClass() && !attackingPiece.getBoardSide().equals(getBoardSide())) {

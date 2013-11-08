@@ -30,7 +30,7 @@ enum PieceType {
 	 * 
 	 * @param pieceClass
 	 */
-	private <T extends Piece> PieceType(Class<T> pieceClass) {
+	private <T extends AbstractPiece> PieceType(Class<T> pieceClass) {
 		this.pieceClass = pieceClass;
 	}
 
@@ -47,7 +47,7 @@ enum PieceType {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Piece> T newInstance() {
+	public <T extends AbstractPiece> T newInstance() {
 		return (T) ReflectUtils.newInstance(pieceClass);
 	}
 }

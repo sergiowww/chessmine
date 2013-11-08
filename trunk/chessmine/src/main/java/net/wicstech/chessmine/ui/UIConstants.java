@@ -8,6 +8,10 @@ import javafx.scene.input.DataFormat;
  * @author Sergio
  * 
  */
-public interface UIConstants {
-	DataFormat POINT_CURRENT_POSITION = new DataFormat("chess.piece.view");
+public final class UIConstants {
+	public static final DataFormat POINT_CURRENT_POSITION = new DataFormat("chess.piece.view");
+
+	private UIConstants() {
+		super();
+	}
 }

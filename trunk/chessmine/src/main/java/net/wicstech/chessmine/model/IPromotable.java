@@ -1,6 +1,6 @@
 package net.wicstech.chessmine.model;
 
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 /**
  * Peça promovível a algo.
@@ -10,7 +10,7 @@ import net.wicstech.chessmine.model.pieces.Piece;
  * @param <T>
  *            peça de destino da promoção.
  */
-public interface IPromotable<T extends Piece> {
+public interface IPromotable<T extends AbstractPiece> {
 
 	T promoteTo();
 

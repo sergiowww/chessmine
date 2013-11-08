@@ -13,7 +13,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.TilePane;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.BoardSide;
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -25,14 +25,16 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 public class SquarePane extends TilePane {
-	private Point squarePosition;
-	private Board board;
-	private Map<Point, SquarePane> indicePaineis;
+	private final Point squarePosition;
+	private final Board board;
+	private final Map<Point, SquarePane> indicePaineis;
 	private Label painelMensagem;
 
-	public SquarePane(boolean alternarCorFundo, Map<Point, SquarePane> indicePaineis, Board board) {
+	public SquarePane(boolean alternarCorFundo, Map<Point, SquarePane> indicePaineis, Board board, Point squarePosition) {
+		super();
 		this.indicePaineis = indicePaineis;
 		this.board = board;
+		this.squarePosition = squarePosition;
 		setStyle(BooleanUtils.toString(alternarCorFundo, BoardSide.WHITE.color(), BoardSide.BLACK.color()));
 		setOrientation(Orientation.HORIZONTAL);
 		setAlignment(Pos.CENTER);
@@ -41,8 +43,8 @@ public class SquarePane extends TilePane {
 
 			@Override
 			public void handle(DragEvent event) {
-				Dragboard db = event.getDragboard();
-				if (db.hasContent(UIConstants.POINT_CURRENT_POSITION)) {
+				Dragboard dragBoard = event.getDragboard();
+				if (dragBoard.hasContent(UIConstants.POINT_CURRENT_POSITION)) {
 					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 				}
 			}
@@ -73,11 +75,11 @@ public class SquarePane extends TilePane {
 	}
 
 	private void setOrPromotePieceView(PieceView pieceViewOrigem) {
-		Piece newPiece = board.promote(squarePosition);
-		if (newPiece != null) {
-			setPieceView(new PieceView(newPiece));
-		} else {
+		AbstractPiece newPiece = board.promote(squarePosition);
+		if (newPiece == null) {
 			setPieceView(pieceViewOrigem);
+		} else {
+			setPieceView(new PieceView(newPiece));
 		}
 	}
 
@@ -102,14 +104,6 @@ public class SquarePane extends TilePane {
 	 */
 	public PieceView getPieceView() {
 		return (PieceView) getChildren().get(NumberUtils.INTEGER_ZERO);
-	}
-
-	/**
-	 * @param squarePosition
-	 *            the squarePosition to set
-	 */
-	public void setSquarePosition(Point squarePosition) {
-		this.squarePosition = squarePosition;
 	}
 
 	/**

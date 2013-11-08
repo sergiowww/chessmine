@@ -15,7 +15,7 @@ import javax.xml.bind.JAXBException;
 import net.wicstech.chessmine.model.boardstate.BoardResultXML;
 import net.wicstech.chessmine.model.boardstate.BoardStateXML;
 import net.wicstech.chessmine.model.pieces.King;
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
+@SuppressWarnings("PMD.ShortVariable")
 public class Board {
 	private static final Log LOG = LogFactory.getLog(Board.class);
 
@@ -42,12 +43,12 @@ public class Board {
 	/**
 	 * Tabuleiro de peças indexado pela coordenada.
 	 */
-	private Map<Point, Piece> piecesOnBoard = new HashMap<>();
+	private final Map<Point, AbstractPiece> piecesOnBoard = new HashMap<>();
 
 	/**
 	 * Peças capturadas.
 	 */
-	private List<Piece> capturedPieces = new ArrayList<>();
+	private final List<AbstractPiece> capturedPieces = new ArrayList<>();
 
 	/**
 	 * Lado que tem a vez de jogar.
@@ -62,10 +63,11 @@ public class Board {
 	/**
 	 * Carrega a posição inicial do tabuleiro.
 	 */
+	@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 	@PostConstruct
 	public void initialSetup() {
-		List<Piece> pieces = boardConfigXML.getPiecesInitial();
-		for (Piece piece : pieces) {
+		List<AbstractPiece> pieces = boardConfigXML.getPiecesInitial();
+		for (AbstractPiece piece : pieces) {
 			piecesOnBoard.put(piece.getCurrentPosition(), piece);
 		}
 	}
@@ -80,16 +82,18 @@ public class Board {
 	 *         jogo.
 	 */
 	public boolean tryMoving(Point from, Point to) {
-		Piece piece = piecesOnBoard.get(from);
+		AbstractPiece piece = piecesOnBoard.get(from);
 		if (!piece.getBoardSide().equals(boardSidePlaying)) {
 			return false;
 		}
 		if (piece.acceptMove(to) && !kingsPlayerIsInCheck(from, to, piece)) {
-			Piece pieceCaptured = move(from, to, piece, piecesOnBoard);
+			AbstractPiece pieceCaptured = move(from, to, piece);
 			if (piece instanceof IUpdateTimesMoved) {
 				((IUpdateTimesMoved) piece).moved();
 			}
-			capturedPieces.add(pieceCaptured);
+			if (pieceCaptured != null) {
+				capturedPieces.add(pieceCaptured);
+			}
 			boardSidePlaying = boardSidePlaying.negate();
 			LOG.info("from: " + from + " to: " + to);
 			return true;
@@ -103,13 +107,12 @@ public class Board {
 	 * @param from
 	 * @param to
 	 * @param piece
-	 * @param boardMap
 	 * @return
 	 */
-	private Piece move(Point from, Point to, Piece piece, Map<Point, Piece> boardMap) {
-		Piece pieceCaptured = boardMap.remove(to);
-		boardMap.remove(from);
-		boardMap.put(to, piece);
+	private AbstractPiece move(Point from, Point to, AbstractPiece piece) {
+		AbstractPiece pieceCaptured = piecesOnBoard.remove(to);
+		piecesOnBoard.remove(from);
+		piecesOnBoard.put(to, piece);
 		piece.setCurrentPosition(to);
 		return pieceCaptured;
 	}
@@ -122,8 +125,8 @@ public class Board {
 	 * @param piece
 	 * @return
 	 */
-	boolean kingsPlayerIsInCheck(Point from, Point to, Piece piece) {
-		Piece capturado = move(from, to, piece, piecesOnBoard);
+	boolean kingsPlayerIsInCheck(Point from, Point to, AbstractPiece piece) {
+		AbstractPiece capturado = move(from, to, piece);
 		boolean check = kingsPlayerIsInCheck(piece);
 		undomove(from, to, piece, capturado);
 		if (check) {
@@ -140,7 +143,7 @@ public class Board {
 	 * @param piece
 	 * @param capturado
 	 */
-	private void undomove(Point from, Point to, Piece piece, Piece capturado) {
+	private void undomove(Point from, Point to, AbstractPiece piece, AbstractPiece capturado) {
 		// restaurar a posição.
 		piecesOnBoard.remove(to);
 		piecesOnBoard.put(from, piece);
@@ -157,11 +160,12 @@ public class Board {
 	 * @param piece
 	 * @return
 	 */
-	private boolean kingsPlayerIsInCheck(Piece piece) {
+	@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
+	private boolean kingsPlayerIsInCheck(AbstractPiece piece) {
 		List<King> kings = getPieces(King.class, piece.getBoardSide());
 		King king = kings.get(NumberUtils.INTEGER_ZERO);
-		Collection<Piece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate());
-		for (Piece pieceToBeTested : distinctPieces) {
+		Collection<AbstractPiece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate());
+		for (AbstractPiece pieceToBeTested : distinctPieces) {
 			if (king.isInCheck(pieceToBeTested)) {
 				return true;
 			}
@@ -176,9 +180,9 @@ public class Board {
 	 * @param boardSide
 	 * @return
 	 */
-	private Collection<Piece> getDistinctPiecesOnBoard(BoardSide boardSide) {
-		Map<Class<?>, Piece> distinctPieces = new HashMap<>();
-		for (Piece piece : piecesOnBoard.values()) {
+	private Collection<AbstractPiece> getDistinctPiecesOnBoard(BoardSide boardSide) {
+		Map<Class<?>, AbstractPiece> distinctPieces = new HashMap<>();
+		for (AbstractPiece piece : piecesOnBoard.values()) {
 			if (piece.getBoardSide().equals(boardSide) && !distinctPieces.containsKey(piece.getClass())) {
 				distinctPieces.put(piece.getClass(), piece);
 			}
@@ -194,10 +198,10 @@ public class Board {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private <T extends Piece> List<T> getPieces(Class<T> clazz, BoardSide boardSide) {
+	private <T extends AbstractPiece> List<T> getPieces(Class<T> clazz, BoardSide boardSide) {
 		List<T> encontrados = new ArrayList<>();
-		Collection<? extends Piece> values = piecesOnBoard.values();
-		for (Piece piece : values) {
+		Collection<? extends AbstractPiece> values = piecesOnBoard.values();
+		for (AbstractPiece piece : values) {
 			if (clazz.isInstance(piece) && boardSide.equals(piece.getBoardSide())) {
 				encontrados.add((T) piece);
 			}
@@ -212,10 +216,10 @@ public class Board {
 	 * @param lastPosition
 	 * @return
 	 */
-	public Piece promote(Point lastPosition) {
-		Piece piece = piecesOnBoard.get(lastPosition);
+	public AbstractPiece promote(Point lastPosition) {
+		AbstractPiece piece = piecesOnBoard.get(lastPosition);
 		if (piece instanceof IPromotable<?>) {
-			Piece promoted = ((IPromotable<?>) piece).promoteTo();
+			AbstractPiece promoted = ((IPromotable<?>) piece).promoteTo();
 			if (promoted != null) {
 				piecesOnBoard.remove(lastPosition);
 				piecesOnBoard.put(lastPosition, promoted);
@@ -243,7 +247,7 @@ public class Board {
 	/**
 	 * @return the piecesOnBoard
 	 */
-	public Map<Point, Piece> getPiecesOnBoard() {
+	public Map<Point, AbstractPiece> getPiecesOnBoard() {
 		return piecesOnBoard;
 	}
 

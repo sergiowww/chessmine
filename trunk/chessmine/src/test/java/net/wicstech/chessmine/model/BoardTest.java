@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
 
-import net.wicstech.chessmine.model.pieces.Piece;
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +40,7 @@ public class BoardTest {
 		// tentar mover o cavalo não vai resolver a situação
 		Point pointFrom_6_0 = new Point(6, 0);
 		Point pointTo_7_2 = new Point(7, 2);
-		Piece ultimaPecaMovida = board.getPiecesOnBoard().get(pointFrom_6_0);
+		AbstractPiece ultimaPecaMovida = board.getPiecesOnBoard().get(pointFrom_6_0);
 		assertFalse(board.tryMoving(pointFrom_6_0, pointTo_7_2));
 		assertTrue(board.kingsPlayerIsInCheck(pointFrom_6_0, pointTo_7_2, ultimaPecaMovida));
 
