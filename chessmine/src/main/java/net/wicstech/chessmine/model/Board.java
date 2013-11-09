@@ -8,14 +8,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 
 import net.wicstech.chessmine.model.boardstate.BoardResultXML;
 import net.wicstech.chessmine.model.boardstate.BoardStateXML;
-import net.wicstech.chessmine.model.pieces.King;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
+import net.wicstech.chessmine.model.pieces.King;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -53,7 +54,7 @@ public class Board {
 	/**
 	 * Lado que tem a vez de jogar.
 	 */
-	private BoardSide boardSidePlaying = BoardSide.BLACK;
+	private BoardSide boardSidePlaying = new Random().nextBoolean() ? BoardSide.BLACK : BoardSide.WHITE;
 
 	/**
 	 * Indica se houve a configuração inicial.
@@ -162,8 +163,7 @@ public class Board {
 	 */
 	@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 	private boolean kingsPlayerIsInCheck(AbstractPiece piece) {
-		List<King> kings = getPieces(King.class, piece.getBoardSide());
-		King king = kings.get(NumberUtils.INTEGER_ZERO);
+		King king = getPiece(King.class, piece.getBoardSide());
 		Collection<AbstractPiece> distinctPieces = getDistinctPiecesOnBoard(piece.getBoardSide().negate());
 		for (AbstractPiece pieceToBeTested : distinctPieces) {
 			if (king.isInCheck(pieceToBeTested)) {
@@ -198,15 +198,14 @@ public class Board {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private <T extends AbstractPiece> List<T> getPieces(Class<T> clazz, BoardSide boardSide) {
-		List<T> encontrados = new ArrayList<>();
+	private <T extends AbstractPiece> T getPiece(Class<T> clazz, BoardSide boardSide) {
 		Collection<? extends AbstractPiece> values = piecesOnBoard.values();
 		for (AbstractPiece piece : values) {
 			if (clazz.isInstance(piece) && boardSide.equals(piece.getBoardSide())) {
-				encontrados.add((T) piece);
+				return (T) piece;
 			}
 		}
-		return encontrados;
+		return null;
 	}
 
 	/**
