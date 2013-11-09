@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.wicstech</groupId>
 	<artifactId>chessmine</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Chess Mine</name>
 	<description>Chess Game</description>
 	<organization>
@@ -26,6 +26,10 @@
 				<version>2.0</version>
 				<configuration>
 					<mainClass>net.wicstech.chessmine.ApplicationEntryPoint</mainClass>
+					<vendor>chessmine.wicstech.net</vendor>
+					<keyStoreAlias>your-username</keyStoreAlias>
+					<keyStorePassword>sergio</keyStorePassword>
+					<allPermissions>true</allPermissions>
 				</configuration>
 			</plugin>
 			<plugin>

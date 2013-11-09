@@ -23,6 +23,9 @@ public class BoardTest {
 
 	@Test
 	public void testKingsPlayerIsInCheck() {
+		if (board.getBoardSidePlaying().equals(BoardSide.WHITE)) {
+			assertTrue(board.tryMoving(new Point(7, 6), new Point(7, 5)));
+		}
 		assertNotNull(board);
 
 		// o jogador black moveu o pião

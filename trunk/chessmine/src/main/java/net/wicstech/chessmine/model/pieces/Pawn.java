@@ -25,7 +25,7 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 	private boolean firstMove = true;
 
 	@Autowired
-	private transient PieceFactory pieceFactory;
+	private PieceFactory pieceFactory;
 
 	/**
 	 * Construtor de visibilidade padrão.
@@ -47,7 +47,7 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 
 	@Override
 	public boolean acceptMove(Point newPosition) {
-		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);
+		return possibleMoves(getCurrentPosition(), getBoardSide(), firstMove).contains(newPosition);
 	}
 
 	/**
@@ -109,9 +109,13 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 
 	@Override
 	public List<Point> possibleMoves(Point givenPoint, BoardSide boardSide) {
+		return possibleMoves(givenPoint, boardSide, false);
+	}
+
+	private List<Point> possibleMoves(Point givenPoint, BoardSide boardSide, boolean first) {
 		List<Point> points = new ArrayList<>();
 		orientedAttack(points, boardSide, givenPoint);
-		if (firstMove) {
+		if (first) {
 			points.addAll(moveVertically(givenPoint, boardSide, boardSide.orientation(), MOVIMENTO_MAX_INICIAL));
 		} else {
 			points.addAll(moveVertically(givenPoint, boardSide, boardSide.orientation(), NumberUtils.INTEGER_ONE));

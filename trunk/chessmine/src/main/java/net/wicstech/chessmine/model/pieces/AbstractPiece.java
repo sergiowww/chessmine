@@ -28,12 +28,8 @@ public abstract class AbstractPiece implements Serializable {
 	private BoardSide boardSide;
 	private String pieceIdXML;
 
-	/**
-	 * O recurso de drag and drop serializa o objeto {@link AbstractPiece}, mas não é
-	 * necessário serializar o tabuleiro.
-	 */
 	@Autowired
-	private transient Board board;
+	private Board board;
 
 	/**
 	 * Construtor de visibilidade padrão.
