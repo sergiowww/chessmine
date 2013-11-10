@@ -65,6 +65,27 @@ public class PawnTest {
 		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.BLACK);
 		Board board = new Board();
+		Point pointAnotherPawn = new Point(1, 4);
+		Pawn anotherPawn = new Pawn();
+		anotherPawn.setBoardSide(BoardSide.WHITE);
+		anotherPawn.setCurrentPosition(pointAnotherPawn);
+		anotherPawn.setBoard(board);
+		board.getPiecesOnBoard().put(pointAnotherPawn, anotherPawn);
+		pawn.setBoard(board);
+		Point pointFirstPawn = new Point(1, 3);
+		pawn.setCurrentPosition(pointFirstPawn);
+		board.getPiecesOnBoard().put(pointFirstPawn, pawn);
+
+		Assert.assertEquals(false, pawn.acceptMove(pointAnotherPawn));
+		Assert.assertEquals(false, anotherPawn.acceptMove(pointFirstPawn));
+
+	}
+
+	@Test
+	public void testAcceptMove4() {
+		Pawn pawn = new Pawn();
+		pawn.setBoardSide(BoardSide.BLACK);
+		Board board = new Board();
 		Point pointKnight = new Point(1, 2);
 		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.WHITE);

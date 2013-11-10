@@ -13,6 +13,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.TilePane;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.BoardSide;
+import net.wicstech.chessmine.model.MoveResult;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -62,15 +63,22 @@ public class SquarePane extends TilePane {
 	private void droppedPiece(DragEvent event) {
 		Dragboard dragboard = event.getDragboard();
 		Point currentPosition = (Point) dragboard.getContent(UIConstants.POINT_CURRENT_POSITION);
-		boolean procceedMove = board.tryMoving(currentPosition, squarePosition);
-		if (procceedMove) {
+		MoveResult procceedMove = board.tryMoving(currentPosition, squarePosition);
+		if (MoveResult.LEGAL.equals(procceedMove)) {
 			SquarePane quadradoOrigem = indicePaineis.get(currentPosition);
 			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
 			quadradoOrigem.getChildren().remove(pieceViewOrigem);
 			painelMensagem.setText(getMensagemAguardando());
 			setOrPromotePieceView(pieceViewOrigem);
-		} else {
+		}
+		if (MoveResult.ILEGAL.equals(procceedMove)) {
 			painelMensagem.setText("Movimento inválido!");
+		}
+		if (MoveResult.KING_IN_CHECK.equals(procceedMove)) {
+			painelMensagem.setText("O seu movimento deixou seu rei em cheque!");
+		}
+		if (MoveResult.ILEGAL_PLAYER.equals(procceedMove)) {
+			painelMensagem.setText("Não é sua vez de jogar!");
 		}
 	}
 

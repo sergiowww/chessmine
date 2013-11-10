@@ -78,16 +78,15 @@ public class Board {
 	 * 
 	 * @param from
 	 * @param to
-	 * @return <code>true</code> se o movimento foi concluído com sucesso
-	 *         <code>false</code> se não - houver alguma violação às regras do
-	 *         jogo.
+	 * @return codigos de retorno do {@link MoveResult}.
 	 */
-	public boolean tryMoving(Point from, Point to) {
+	public MoveResult tryMoving(Point from, Point to) {
 		AbstractPiece piece = piecesOnBoard.get(from);
 		if (!piece.getBoardSide().equals(boardSidePlaying)) {
-			return false;
+			return MoveResult.ILEGAL_PLAYER;
 		}
-		if (piece.acceptMove(to) && !kingsPlayerIsInCheck(from, to, piece)) {
+		boolean moveAccepted = piece.acceptMove(to);
+		if (moveAccepted && !kingsPlayerIsInCheck(from, to, piece)) {
 			AbstractPiece pieceCaptured = move(from, to, piece);
 			if (piece instanceof IUpdateTimesMoved) {
 				((IUpdateTimesMoved) piece).moved();
@@ -97,9 +96,13 @@ public class Board {
 			}
 			boardSidePlaying = boardSidePlaying.negate();
 			LOG.info("from: " + from + " to: " + to);
-			return true;
+			return MoveResult.LEGAL;
 		}
-		return false;
+		if (!moveAccepted) {
+			return MoveResult.ILEGAL;
+		}
+
+		return MoveResult.KING_IN_CHECK;
 	}
 
 	/**
@@ -126,7 +129,7 @@ public class Board {
 	 * @param piece
 	 * @return
 	 */
-	boolean kingsPlayerIsInCheck(Point from, Point to, AbstractPiece piece) {
+	private boolean kingsPlayerIsInCheck(Point from, Point to, AbstractPiece piece) {
 		AbstractPiece capturado = move(from, to, piece);
 		boolean check = kingsPlayerIsInCheck(piece);
 		undomove(from, to, piece, capturado);

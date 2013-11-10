@@ -11,6 +11,7 @@ import net.wicstech.chessmine.model.IUpdateTimesMoved;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Pião.
@@ -116,11 +117,23 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 		List<Point> points = new ArrayList<>();
 		orientedAttack(points, boardSide, givenPoint);
 		if (first) {
-			points.addAll(moveVertically(givenPoint, boardSide, boardSide.orientation(), MOVIMENTO_MAX_INICIAL));
+			points.addAll(justMoveNoAttack(givenPoint, boardSide, MOVIMENTO_MAX_INICIAL));
 		} else {
-			points.addAll(moveVertically(givenPoint, boardSide, boardSide.orientation(), NumberUtils.INTEGER_ONE));
+			points.addAll(justMoveNoAttack(givenPoint, boardSide, NumberUtils.INTEGER_ONE));
 		}
 		return points;
+	}
+
+	private List<Point> justMoveNoAttack(Point givenPoint, BoardSide boardSide, Integer mov) {
+		List<Point> pointsCollected = moveVertically(givenPoint, boardSide, boardSide.orientation(), mov);
+		if (!CollectionUtils.isEmpty(pointsCollected)) {
+			Point lastPoint = pointsCollected.get(pointsCollected.size() - NumberUtils.INTEGER_ONE);
+			AbstractPiece point = getBoard().getPiecesOnBoard().get(lastPoint);
+			if (point != null) {
+				pointsCollected.remove(lastPoint);
+			}
+		}
+		return pointsCollected;
 	}
 
 	@Override
