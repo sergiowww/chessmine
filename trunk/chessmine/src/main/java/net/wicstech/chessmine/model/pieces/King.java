@@ -1,7 +1,6 @@
 package net.wicstech.chessmine.model.pieces;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 @SuppressWarnings("PMD.ShortClassName")
-public class King extends AbstractPiece {
+public class King extends AbstractCollectBehaviorPiece {
 	private static final long serialVersionUID = -7098370625157522187L;
 
 	/**
@@ -29,23 +28,56 @@ public class King extends AbstractPiece {
 	}
 
 	@Override
-	public boolean acceptMove(Point newPosition) {
-		List<Point> points = possibleMoves(getCurrentPosition(), getBoardSide());
-		return points.contains(newPosition);
-	}
+	public ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
+		ICollector[] collectors = {new ICollector() {
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveVertically(givenPoint, boardSide, Orientation.FORTH, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
 
-	@Override
-	public List<Point> possibleMoves(Point givenPoint, BoardSide boardSide) {
-		List<Point> points = new ArrayList<>();
-		points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.LEFT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.RIGHT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.LEFT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.RIGHT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveHorizontally(givenPoint, boardSide, Direction.LEFT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveHorizontally(givenPoint, boardSide, Direction.RIGHT, NumberUtils.INTEGER_ONE));
-		points.addAll(moveVertically(givenPoint, boardSide, Orientation.BACK, NumberUtils.INTEGER_ONE));
-		points.addAll(moveVertically(givenPoint, boardSide, Orientation.FORTH, NumberUtils.INTEGER_ONE));
-		return points;
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveVertically(givenPoint, boardSide, Orientation.BACK, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveHorizontally(givenPoint, boardSide, Direction.RIGHT, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveHorizontally(givenPoint, boardSide, Direction.LEFT, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.RIGHT, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.LEFT, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.RIGHT, NumberUtils.INTEGER_ONE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.LEFT, NumberUtils.INTEGER_ONE));
+			}
+		}};
+		return collectors;
 	}
 
 	/**

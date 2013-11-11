@@ -1,7 +1,6 @@
 package net.wicstech.chessmine.model.pieces;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.wicstech.chessmine.model.BoardSide;
@@ -14,7 +13,7 @@ import net.wicstech.chessmine.model.Orientation;
  * @author Sergio
  * 
  */
-public class Bishop extends AbstractPiece {
+public class Bishop extends AbstractCollectBehaviorPiece {
 	private static final long serialVersionUID = 5443101730149654318L;
 
 	/**
@@ -25,18 +24,36 @@ public class Bishop extends AbstractPiece {
 	}
 
 	@Override
-	public boolean acceptMove(Point newPosition) {
-		return possibleMoves(getCurrentPosition(), getBoardSide()).contains(newPosition);
-	}
+	public ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
+		return new ICollector[] {new ICollector() {
 
-	@Override
-	public List<Point> possibleMoves(Point givenPoint, BoardSide boardSide) {
-		List<Point> possibleMoves = new ArrayList<>();
-		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.LEFT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.RIGHT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
-		possibleMoves.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.RIGHT, Integer.MAX_VALUE));
-		return possibleMoves;
+			@Override
+			public void collect(List<Point> points) {
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.RIGHT, Integer.MAX_VALUE));
+
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.FORTH, Direction.LEFT, Integer.MAX_VALUE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.RIGHT, Integer.MAX_VALUE));
+			}
+		}, new ICollector() {
+
+			@Override
+			public void collect(List<Point> points) {
+
+				points.addAll(moveBias(givenPoint, boardSide, Orientation.BACK, Direction.LEFT, Integer.MAX_VALUE));
+			}
+		}};
 	}
 
 }
