@@ -26,6 +26,7 @@ public class PieceFactory {
 		for (PieceType pieceType : PieceType.values()) {
 			if (clazz.equals(pieceType.getPieceClass())) {
 				T piece = pieceType.newInstance();
+				piece.setType(pieceType.ordinal());
 				autowirePiece(piece);
 				return piece;
 			}
@@ -46,6 +47,7 @@ public class PieceFactory {
 	public <T extends AbstractPiece> T newInstance(int type) {
 		PieceType pieceType = PieceType.values()[type];
 		T piece = pieceType.newInstance();
+		piece.setType(pieceType.ordinal());
 		autowirePiece(piece);
 		return piece;
 	}

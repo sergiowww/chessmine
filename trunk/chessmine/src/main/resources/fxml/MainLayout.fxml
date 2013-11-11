@@ -46,6 +46,7 @@
           <items>
             <MenuItem mnemonicParsing="false" onAction="#novoJogo" text="Novo jogo" />
             <MenuItem mnemonicParsing="false" onAction="#salvarJogo" text="Salvar" />
+            <MenuItem mnemonicParsing="false" onAction="#carregarJogo" text="Abrir" />
             <MenuItem mnemonicParsing="false" onAction="#sair" text="Sair" />
           </items>
         </Menu>

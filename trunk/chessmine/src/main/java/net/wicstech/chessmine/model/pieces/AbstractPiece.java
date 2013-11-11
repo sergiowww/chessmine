@@ -26,7 +26,7 @@ public abstract class AbstractPiece implements Serializable {
 
 	private Point currentPosition;
 	private BoardSide boardSide;
-	private String pieceIdXML;
+	private int type;
 
 	@Autowired
 	private Board board;
@@ -233,21 +233,6 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	/**
-	 * @return the pieceIdXML
-	 */
-	public String getPieceIdXML() {
-		return pieceIdXML;
-	}
-
-	/**
-	 * @param pieceIdXML
-	 *            the pieceId to set
-	 */
-	public void setPieceIdXML(String pieceIdXML) {
-		this.pieceIdXML = pieceIdXML;
-	}
-
-	/**
 	 * Caminhar na orientação frente ou trás.
 	 * 
 	 * @author Sergio
@@ -293,5 +278,20 @@ public abstract class AbstractPiece implements Serializable {
 				point.x++;
 			}
 		}
+	}
+
+	/**
+	 * @return the type
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(int type) {
+		this.type = type;
 	}
 }

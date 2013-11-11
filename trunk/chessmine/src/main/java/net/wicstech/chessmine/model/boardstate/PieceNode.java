@@ -2,7 +2,6 @@ package net.wicstech.chessmine.model.boardstate;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import net.wicstech.chessmine.model.BoardSide;
@@ -18,23 +17,38 @@ import net.wicstech.chessmine.model.pieces.PieceFactory;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 class PieceNode {
-	@XmlAttribute(name = "id")
-	private String pieceId;
 
 	@XmlElement(name = "type")
 	private int type;
 
-	@XmlElement(name = "line")
-	private int line;
+	@XmlElement(name = "color")
+	private String color;
 
-	@XmlElement(name = "col")
-	private int col;
+	@XmlElement(name = "x")
+	private int x;
 
-	@XmlElement(name = "black")
-	private String black;
+	@XmlElement(name = "y")
+	private int y;
 
-	@XmlElement(name = "white")
-	private String white;
+	/**
+	 * Construtor wrapper.
+	 * 
+	 * @param abstractPiece
+	 */
+	public PieceNode(AbstractPiece abstractPiece) {
+		super();
+		this.x = abstractPiece.getCurrentPosition().x;
+		this.y = abstractPiece.getCurrentPosition().y;
+		this.color = abstractPiece.getBoardSide().name();
+		this.type = abstractPiece.getType();
+	}
+
+	/**
+	 * Construtor padrão.
+	 */
+	public PieceNode() {
+		super();
+	}
 
 	/**
 	 * Instancia a peça com os dados.
@@ -45,14 +59,8 @@ class PieceNode {
 	 */
 	public AbstractPiece getPiece(PieceFactory pieceFactory) {
 		AbstractPiece piece = pieceFactory.newInstance(type);
-		piece.setPieceIdXML(pieceId);
-		piece.setCurrentPosition(PointFactory.newPoint(col - 1, line - 1));
-		if (black != null) {
-			piece.setBoardSide(BoardSide.BLACK);
-		}
-		if (white != null) {
-			piece.setBoardSide(BoardSide.WHITE);
-		}
+		piece.setCurrentPosition(PointFactory.newPoint(x, y));
+		piece.setBoardSide(BoardSide.valueOf(color));
 		return piece;
 	}
 }

@@ -3,7 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<bean class="net.wicstech.chessmine.model.Board"/>
-	<bean class="net.wicstech.chessmine.model.boardstate.BoardStateXMLFactoryBean"/>
-	<bean class="net.wicstech.chessmine.model.boardstate.BoardResultXML"/>
+	<bean class="net.wicstech.chessmine.model.boardstate.BoardState"/>
 	<bean class="net.wicstech.chessmine.model.pieces.PieceFactory"/>
 </beans>

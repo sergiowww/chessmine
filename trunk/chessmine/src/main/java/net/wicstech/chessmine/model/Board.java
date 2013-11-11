@@ -2,6 +2,7 @@ package net.wicstech.chessmine.model;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,8 +14,7 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 
-import net.wicstech.chessmine.model.boardstate.BoardResultXML;
-import net.wicstech.chessmine.model.boardstate.BoardStateXML;
+import net.wicstech.chessmine.model.boardstate.BoardState;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.King;
 
@@ -36,10 +36,7 @@ public class Board {
 	private static final Log LOG = LogFactory.getLog(Board.class);
 
 	@Autowired
-	private BoardStateXML boardConfigXML;
-
-	@Autowired
-	private BoardResultXML boardResultXML;
+	private BoardState boardConfigXML;
 
 	/**
 	 * Tabuleiro de peças indexado pela coordenada.
@@ -68,6 +65,15 @@ public class Board {
 	@PostConstruct
 	public void initialSetup() {
 		List<AbstractPiece> pieces = boardConfigXML.getPiecesInitial();
+		setPiecesOnBoard(pieces);
+	}
+
+	/**
+	 * Alocar peças no tabuleiro.
+	 * 
+	 * @param pieces
+	 */
+	private void setPiecesOnBoard(List<AbstractPiece> pieces) {
 		for (AbstractPiece piece : pieces) {
 			piecesOnBoard.put(piece.getCurrentPosition(), piece);
 		}
@@ -255,12 +261,19 @@ public class Board {
 
 	/**
 	 * Reiniciar o jogo.
+	 * 
+	 * @param xmlFile
+	 * @throws FileNotFoundException
 	 */
-	public void reiniciar() {
+	public void reiniciar(File xmlFile) throws FileNotFoundException {
 		piecesOnBoard.clear();
 		capturedPieces.clear();
 		setConfigured(false);
-		initialSetup();
+		if (xmlFile == null || !xmlFile.exists()) {
+			setPiecesOnBoard(boardConfigXML.getPiecesInitial());
+		} else {
+			setPiecesOnBoard(boardConfigXML.loadFromFile(xmlFile));
+		}
 	}
 
 	/**
@@ -319,6 +332,17 @@ public class Board {
 	 * @throws JAXBException
 	 */
 	public String salvar(File arquivoDestino) throws JAXBException, IOException {
-		return boardResultXML.savePieces(piecesOnBoard.values(), arquivoDestino);
+		return boardConfigXML.savePieces(piecesOnBoard.values(), arquivoDestino);
+	}
+
+	/**
+	 * Carregar peças do tabuleiro.
+	 * 
+	 * @param arquivoOrigem
+	 * @throws FileNotFoundException
+	 */
+	public void loadPiecesFromFile(File arquivoOrigem) throws FileNotFoundException {
+		List<AbstractPiece> pieces = boardConfigXML.loadFromFile(arquivoOrigem);
+		setPiecesOnBoard(pieces);
 	}
 }

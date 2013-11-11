@@ -2,6 +2,7 @@ package net.wicstech.chessmine.ui;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -78,11 +79,40 @@ public class MainController implements Initializable {
 	}
 
 	/**
-	 * Reiniciar o jogo.
+	 * Carregar jogo salvo.
 	 */
-	public void novoJogo() {
+	public void carregarJogo() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Abrir um jogo salvo...");
+		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML File", "*.xml"));
+		fileChooser.setInitialDirectory(SystemUtils.getUserHome());
+		File file = fileChooser.showOpenDialog(getWindow());
+		try {
+			abrirJogo(file);
+		} catch (Exception e) {
+			painelMensagem.setText("Não foi possível abrir este jogo: " + e.getMessage());
+		}
+
+	}
+
+	/**
+	 * Reiniciar o jogo.
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public void novoJogo() throws FileNotFoundException {
 		LOG.info("Reiniciando tabuleiro");
 
+		abrirJogo(null);
+	}
+
+	/**
+	 * Abrir jogo ou carregar um novo.
+	 * 
+	 * @param xmlFile
+	 * @throws FileNotFoundException
+	 */
+	private void abrirJogo(File xmlFile) throws FileNotFoundException {
 		FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000));
 		fadeTransition.setFromValue(1.0f);
 		fadeTransition.setToValue(0.0);
@@ -90,7 +120,7 @@ public class MainController implements Initializable {
 		fadeTransition.play();
 
 		gameBoard.getChildren().clear();
-		board.reiniciar();
+		board.reiniciar(xmlFile);
 		inicializar();
 
 		fadeTransition = new FadeTransition(Duration.millis(1000));
@@ -110,7 +140,7 @@ public class MainController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Escolha onde salvar o arquivo");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML File", "*.xml"));
-		fileChooser.setInitialFileName("board_result.xml");
+		fileChooser.setInitialFileName("board-result.xml");
 		fileChooser.setInitialDirectory(SystemUtils.getUserHome());
 		File file = fileChooser.showSaveDialog(getWindow());
 		if (file != null) {
