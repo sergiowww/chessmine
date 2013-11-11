@@ -27,6 +27,7 @@
 				<configuration>
 					<mainClass>net.wicstech.chessmine.ApplicationEntryPoint</mainClass>
 					<vendor>chessmine.wicstech.net</vendor>
+					<identifier>ChessMine</identifier>
 					<keyStoreAlias>your-username</keyStoreAlias>
 					<keyStorePassword>sergio</keyStorePassword>
 					<allPermissions>true</allPermissions>

@@ -2,8 +2,8 @@ package net.wicstech.chessmine.model;
 
 import java.awt.Point;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 
 import net.wicstech.chessmine.model.boardstate.BoardState;
+import net.wicstech.chessmine.model.boardstate.GameBoardConfig;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.King;
 
@@ -102,6 +103,9 @@ public class Board {
 			}
 			boardSidePlaying = boardSidePlaying.negate();
 			LOG.info("from: " + from + " to: " + to);
+			if (isCheckMate()) {
+				return MoveResult.CHECK_MATE;
+			}
 			return MoveResult.LEGAL;
 		}
 		if (!moveAccepted) {
@@ -109,6 +113,25 @@ public class Board {
 		}
 
 		return MoveResult.KING_IN_CHECK;
+	}
+
+	/**
+	 * Verificar se a jogada anterior, finalizou o jogo.
+	 * 
+	 * @return
+	 */
+	private boolean isCheckMate() {
+		King king = getPiece(King.class, boardSidePlaying);
+		List<Point> possibleMoves = king.possibleMoves(king.getCurrentPosition(), king.getBoardSide());
+		if (possibleMoves.isEmpty()) {
+			return false;
+		}
+		for (Point point : possibleMoves) {
+			if (!kingsPlayerIsInCheck(king.getCurrentPosition(), point, king)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -131,8 +154,11 @@ public class Board {
 	 * Verifica se o rei do jogador que terminou a jogada está em cheque.
 	 * 
 	 * @param from
+	 *            quadrado origem
 	 * @param to
+	 *            quadrado destino
 	 * @param piece
+	 *            peça que será movida
 	 * @return
 	 */
 	private boolean kingsPlayerIsInCheck(Point from, Point to, AbstractPiece piece) {
@@ -263,16 +289,17 @@ public class Board {
 	 * Reiniciar o jogo.
 	 * 
 	 * @param xmlFile
-	 * @throws FileNotFoundException
 	 */
-	public void reiniciar(File xmlFile) throws FileNotFoundException {
+	public void reiniciar(InputStream xmlFile) {
 		piecesOnBoard.clear();
 		capturedPieces.clear();
 		setConfigured(false);
-		if (xmlFile == null || !xmlFile.exists()) {
+		if (xmlFile == null) {
 			setPiecesOnBoard(boardConfigXML.getPiecesInitial());
 		} else {
-			setPiecesOnBoard(boardConfigXML.loadFromFile(xmlFile));
+			GameBoardConfig gameBoardConfig = boardConfigXML.loadPieces(xmlFile);
+			setPiecesOnBoard(gameBoardConfig.getPieces());
+			boardSidePlaying = gameBoardConfig.getBoardSide();
 		}
 	}
 
@@ -332,17 +359,7 @@ public class Board {
 	 * @throws JAXBException
 	 */
 	public String salvar(File arquivoDestino) throws JAXBException, IOException {
-		return boardConfigXML.savePieces(piecesOnBoard.values(), arquivoDestino);
+		return boardConfigXML.savePieces(piecesOnBoard.values(), boardSidePlaying, arquivoDestino);
 	}
 
-	/**
-	 * Carregar peças do tabuleiro.
-	 * 
-	 * @param arquivoOrigem
-	 * @throws FileNotFoundException
-	 */
-	public void loadPiecesFromFile(File arquivoOrigem) throws FileNotFoundException {
-		List<AbstractPiece> pieces = boardConfigXML.loadFromFile(arquivoOrigem);
-		setPiecesOnBoard(pieces);
-	}
 }

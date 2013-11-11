@@ -26,6 +26,11 @@ public enum MoveResult {
 	/**
 	 * Não é a vez do jogador que fez a jogada.
 	 */
-	ILEGAL_PLAYER
+	ILEGAL_PLAYER,
+
+	/**
+	 * Fim do jogo
+	 */
+	CHECK_MATE
 
 }

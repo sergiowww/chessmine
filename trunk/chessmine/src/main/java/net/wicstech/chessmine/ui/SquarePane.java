@@ -64,12 +64,16 @@ public class SquarePane extends TilePane {
 		Dragboard dragboard = event.getDragboard();
 		Point currentPosition = (Point) dragboard.getContent(UIConstants.POINT_CURRENT_POSITION);
 		MoveResult procceedMove = board.tryMoving(currentPosition, squarePosition);
-		if (MoveResult.LEGAL.equals(procceedMove)) {
+
+		if (MoveResult.LEGAL.equals(procceedMove) || MoveResult.CHECK_MATE.equals(procceedMove)) {
 			SquarePane quadradoOrigem = indicePaineis.get(currentPosition);
 			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
 			quadradoOrigem.getChildren().remove(pieceViewOrigem);
 			painelMensagem.setText(getMensagemAguardando());
 			setOrPromotePieceView(pieceViewOrigem);
+		}
+		if (MoveResult.CHECK_MATE.equals(procceedMove)) {
+			painelMensagem.setText("O jogador " + board.getBoardSidePlaying().negate() + " ganhou a partida, CHECK MATE!");
 		}
 		if (MoveResult.ILEGAL.equals(procceedMove)) {
 			painelMensagem.setText("Movimento inválido!");

@@ -2,6 +2,7 @@ package net.wicstech.chessmine.ui;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -120,7 +121,11 @@ public class MainController implements Initializable {
 		fadeTransition.play();
 
 		gameBoard.getChildren().clear();
-		board.reiniciar(xmlFile);
+		FileInputStream fis = null;
+		if (xmlFile != null && xmlFile.exists()) {
+			fis = new FileInputStream(xmlFile);
+		}
+		board.reiniciar(fis);
 		inicializar();
 
 		fadeTransition = new FadeTransition(Duration.millis(1000));
