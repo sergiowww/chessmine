@@ -1,42 +1,31 @@
 package net.wicstech.chessmine.model.boardstate;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import net.wicstech.chessmine.model.pieces.AbstractPiece;
-import net.wicstech.chessmine.model.pieces.PieceFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-/**
- * Carregador das peças.
- * 
- * @author Sergio
- * 
- */
-@XmlRootElement(name = "board_setup")
-public class BoardStateXML {
+@XmlRootElement(name = "board-state")
+@XmlAccessorType(XmlAccessType.FIELD)
+class BoardStateXML {
 
 	@XmlElement(name = "piece")
 	private List<PieceNode> pieceNodes;
 
-	@Autowired
-	private PieceFactory pieceFactory;
-
 	/**
-	 * Retorna as peças inicialmente posicionadas.
-	 * 
-	 * @return
+	 * @return the pieceNodes
 	 */
-	public List<AbstractPiece> getPiecesInitial() {
-		List<AbstractPiece> pieces = new ArrayList<>();
-		for (PieceNode pieceNode : pieceNodes) {
-			pieces.add(pieceNode.getPiece(pieceFactory));
-		}
-		return pieces;
+	public List<PieceNode> getPieceNodes() {
+		return pieceNodes;
 	}
 
+	/**
+	 * @param pieceNodes
+	 *            the pieceNodes to set
+	 */
+	public void setPieceNodes(List<PieceNode> pieceNodes) {
+		this.pieceNodes = pieceNodes;
+	}
 }
