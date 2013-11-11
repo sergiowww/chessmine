@@ -10,5 +10,11 @@ import java.util.List;
  * 
  */
 interface ICollector {
+
+	/**
+	 * Adicionar os pontos coletados na lista.
+	 * 
+	 * @param points
+	 */
 	void collect(List<Point> points);
 }

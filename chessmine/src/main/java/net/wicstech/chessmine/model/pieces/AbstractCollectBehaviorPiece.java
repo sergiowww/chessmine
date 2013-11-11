@@ -32,7 +32,7 @@ abstract class AbstractCollectBehaviorPiece extends AbstractPiece {
 	 */
 	@Override
 	public final boolean acceptMove(Point searchFor) {
-		ICollector[] collectors = ((AbstractCollectBehaviorPiece) this).getCollectors(getCurrentPosition(), getBoardSide());
+		ICollector[] collectors = getCollectors(getCurrentPosition(), getBoardSide());
 		List<Point> points = new ArrayList<>();
 		for (ICollector iCollector : collectors) {
 			iCollector.collect(points);
@@ -52,7 +52,7 @@ abstract class AbstractCollectBehaviorPiece extends AbstractPiece {
 	 */
 	@Override
 	public final List<Point> possibleMoves(Point givenPoint, BoardSide boardSide) {
-		ICollector[] collectors = ((AbstractCollectBehaviorPiece) this).getCollectors(givenPoint, boardSide);
+		ICollector[] collectors = getCollectors(givenPoint, boardSide);
 		List<Point> points = new ArrayList<>();
 		for (ICollector iCollector : collectors) {
 			iCollector.collect(points);
