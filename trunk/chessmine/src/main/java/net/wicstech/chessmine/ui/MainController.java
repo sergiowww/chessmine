@@ -82,6 +82,7 @@ public class MainController implements Initializable {
 	/**
 	 * Carregar jogo salvo.
 	 */
+	@SuppressWarnings("PMD.AvoidCatchingGenericException")
 	public void carregarJogo() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Abrir um jogo salvo...");

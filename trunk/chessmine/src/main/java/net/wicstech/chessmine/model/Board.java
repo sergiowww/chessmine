@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
  * 
  */
 @Service
-@SuppressWarnings("PMD.ShortVariable")
+@SuppressWarnings({"PMD.ShortVariable", "PMD.GodClass"})
 public class Board {
 	private static final Log LOG = LogFactory.getLog(Board.class);
 
@@ -65,8 +65,14 @@ public class Board {
 	@SuppressWarnings("PMD.DataflowAnomalyAnalysis")
 	@PostConstruct
 	public void initialSetup() {
-		List<AbstractPiece> pieces = boardConfigXML.getPiecesInitial();
-		setPiecesOnBoard(pieces);
+		piecesOnInitialPosition();
+	}
+
+	/**
+	 * Alocar peças na posição inicial.
+	 */
+	private void piecesOnInitialPosition() {
+		setPiecesOnBoard(boardConfigXML.getPiecesInitial());
 	}
 
 	/**
@@ -295,7 +301,7 @@ public class Board {
 		capturedPieces.clear();
 		setConfigured(false);
 		if (xmlFile == null) {
-			setPiecesOnBoard(boardConfigXML.getPiecesInitial());
+			piecesOnInitialPosition();
 		} else {
 			GameBoardConfig gameBoardConfig = boardConfigXML.loadPieces(xmlFile);
 			setPiecesOnBoard(gameBoardConfig.getPieces());

@@ -15,6 +15,7 @@ import net.wicstech.chessmine.model.pieces.PieceFactory;
  * @author Sergio
  * 
  */
+@SuppressWarnings("PMD.ShortVariable")
 @XmlAccessorType(XmlAccessType.FIELD)
 class PieceNode {
 
