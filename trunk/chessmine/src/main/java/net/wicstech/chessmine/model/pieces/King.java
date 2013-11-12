@@ -28,7 +28,7 @@ public class King extends AbstractCollectBehaviorPiece {
 	}
 
 	@Override
-	public ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
+	protected ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
 		ICollector[] collectors = {new ICollector() {
 			@Override
 			public void collect(List<Point> points) {
