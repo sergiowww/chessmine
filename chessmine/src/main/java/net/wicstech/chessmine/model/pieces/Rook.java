@@ -25,7 +25,7 @@ public class Rook extends AbstractCollectBehaviorPiece {
 	}
 
 	@Override
-	public ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
+	protected ICollector[] getCollectors(final Point givenPoint, final BoardSide boardSide) {
 		return new ICollector[] {new ICollector() {
 
 			@Override

@@ -22,7 +22,7 @@ abstract class AbstractCollectBehaviorPiece extends AbstractPiece {
 	 * @param boardSide
 	 * @return
 	 */
-	public abstract ICollector[] getCollectors(Point givenPoint, BoardSide boardSide);
+	protected abstract ICollector[] getCollectors(Point givenPoint, BoardSide boardSide);
 
 	/**
 	 * Coletar pontos até encontrar a posição correta.
