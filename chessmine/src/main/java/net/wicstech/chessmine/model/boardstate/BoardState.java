@@ -61,12 +61,12 @@ public class BoardState {
 	 * @param inputStream
 	 * @return
 	 */
+	@SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
 	private BoardStateXML loadPieceNodes(InputStream inputStream) {
 		try (InputStream xmlFile = inputStream) {
 			JAXBContext context = JAXBContext.newInstance(BoardStateXML.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			BoardStateXML boardStateXML = (BoardStateXML) unmarshaller.unmarshal(xmlFile);
-			return boardStateXML;
+			return (BoardStateXML) unmarshaller.unmarshal(xmlFile);
 		} catch (JAXBException | IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -82,6 +82,7 @@ public class BoardState {
 	 * @throws JAXBException
 	 * @throws IOException
 	 */
+	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
 	public String savePieces(Collection<AbstractPiece> values, BoardSide boardSidePlaying, File arquivoDestino) throws JAXBException, IOException {
 		JAXBContext jaxb = JAXBContext.newInstance(BoardStateXML.class);
 		Marshaller marshaller = jaxb.createMarshaller();
