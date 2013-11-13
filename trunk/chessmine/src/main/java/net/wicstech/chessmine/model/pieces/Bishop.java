@@ -13,6 +13,7 @@ import net.wicstech.chessmine.model.Orientation;
  * @author Sergio
  * 
  */
+@SuppressWarnings("ucd")
 public class Bishop extends AbstractCollectBehaviorPiece {
 	private static final long serialVersionUID = 5443101730149654318L;
 

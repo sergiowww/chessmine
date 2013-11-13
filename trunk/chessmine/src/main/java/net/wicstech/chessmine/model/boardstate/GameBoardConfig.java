@@ -28,7 +28,7 @@ public class GameBoardConfig {
 	 * @param pieces
 	 * @param boardSide
 	 */
-	public GameBoardConfig(List<AbstractPiece> pieces, BoardSide boardSide) {
+	GameBoardConfig(List<AbstractPiece> pieces, BoardSide boardSide) {
 		super();
 		this.pieces = pieces;
 		this.boardSide = boardSide;

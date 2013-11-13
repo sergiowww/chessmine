@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -12,7 +11,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import net.wicstech.chessmine.model.BoardSide;
+import net.wicstech.chessmine.model.BoardCurrentGameData;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.PieceFactory;
 
@@ -30,6 +29,9 @@ public class BoardState {
 
 	@Autowired
 	private PieceFactory pieceFactory;
+
+	@Autowired
+	private BoardCurrentGameData boardData;
 
 	/**
 	 * Retorna as peças inicialmente posicionadas.
@@ -75,15 +77,13 @@ public class BoardState {
 	/**
 	 * Salvar peças em um arquivo.
 	 * 
-	 * @param values
-	 * @param boardSidePlaying
 	 * @param arquivoDestino
 	 * @return
 	 * @throws JAXBException
 	 * @throws IOException
 	 */
 	@SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-	public String savePieces(Collection<AbstractPiece> values, BoardSide boardSidePlaying, File arquivoDestino) throws JAXBException, IOException {
+	public String savePieces(File arquivoDestino) throws JAXBException, IOException {
 		JAXBContext jaxb = JAXBContext.newInstance(BoardStateXML.class);
 		Marshaller marshaller = jaxb.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -93,8 +93,8 @@ public class BoardState {
 		arquivoDestino.createNewFile();
 		BoardStateXML boardStateXML = new BoardStateXML();
 		boardStateXML.setPieceNodes(new ArrayList<PieceNode>());
-		boardStateXML.setBoardSidePlaying(boardSidePlaying);
-		for (AbstractPiece abstractPiece : values) {
+		boardStateXML.setBoardSidePlaying(boardData.getBoardSidePlaying());
+		for (AbstractPiece abstractPiece : boardData.getPiecesOnBoard().values()) {
 			boardStateXML.getPieceNodes().add(new PieceNode(abstractPiece));
 		}
 		marshaller.marshal(boardStateXML, arquivoDestino);

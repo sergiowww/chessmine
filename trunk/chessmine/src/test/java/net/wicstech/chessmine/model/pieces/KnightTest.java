@@ -6,16 +6,37 @@ import junit.framework.Assert;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.BoardSide;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/KnightTest.xml", "/common-tests.xml"})
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class KnightTest {
+
+	@Autowired
+	private Knight knight;
+
+	@Autowired
+	private Queen blackQueen;
+
+	@Autowired
+	private Board board;
+
+	@Before
+	public void setup() {
+		board.getPiecesOnBoard().clear();
+	}
 
 	@Test
 	public void testAcceptMove() {
-		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
-		knight.setBoard(board);
 		knight.setCurrentPosition(new Point(3, 4));
 
 		Assert.assertEquals(true, knight.acceptMove(new Point(1, 3)));
@@ -35,10 +56,7 @@ public class KnightTest {
 
 	@Test
 	public void testAcceptMove1() {
-		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
-		Queen blackQueen = new Queen();
 		blackQueen.setBoardSide(BoardSide.BLACK);
 		Point pointBlackQueen = new Point(5, 5);
 		blackQueen.setCurrentPosition(pointBlackQueen);
@@ -46,7 +64,6 @@ public class KnightTest {
 
 		putQueenOnSameSide(board, new Point(4, 6));
 
-		knight.setBoard(board);
 		knight.setCurrentPosition(new Point(3, 4));
 
 		Assert.assertEquals(true, knight.acceptMove(new Point(1, 3)));
@@ -62,10 +79,7 @@ public class KnightTest {
 
 	@Test
 	public void testAcceptMove2() {
-		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
-		Queen blackQueen = new Queen();
 		blackQueen.setBoardSide(BoardSide.BLACK);
 		Point pos6 = new Point(5, 5);
 		Point pointBlackQueen = pos6;
@@ -91,7 +105,6 @@ public class KnightTest {
 		putQueenOnSameSide(board, pos8);
 		putQueenOnSameSide(board, pos9);
 
-		knight.setBoard(board);
 		knight.setCurrentPosition(new Point(3, 4));
 
 		Assert.assertEquals(false, knight.acceptMove(pos1));
