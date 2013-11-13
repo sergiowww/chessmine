@@ -4,11 +4,13 @@ import java.awt.Point;
 import java.util.List;
 import java.util.Map;
 
+import net.wicstech.chessmine.model.BoardCurrentGameData;
 import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.Direction;
 import net.wicstech.chessmine.model.Orientation;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Rei.
@@ -19,6 +21,9 @@ import org.apache.commons.lang.math.NumberUtils;
 @SuppressWarnings("PMD.ShortClassName")
 public class King extends AbstractCollectBehaviorPiece {
 	private static final long serialVersionUID = -7098370625157522187L;
+
+	@Autowired
+	private BoardCurrentGameData boardData;
 
 	/**
 	 * Construtor de visibilidade padrão.
@@ -90,7 +95,7 @@ public class King extends AbstractCollectBehaviorPiece {
 	public boolean isInCheck(AbstractPiece piece) {
 		List<Point> possibleMoves = piece.possibleMoves(getCurrentPosition(), getBoardSide());
 		for (Point point : possibleMoves) {
-			Map<Point, AbstractPiece> piecesOnBoard = getBoard().getPiecesOnBoard();
+			Map<Point, AbstractPiece> piecesOnBoard = boardData.getPiecesOnBoard();
 			// Existe uma peça nesta posição
 			if (piecesOnBoard.containsKey(point)) {
 				AbstractPiece attackingPiece = piecesOnBoard.get(point);

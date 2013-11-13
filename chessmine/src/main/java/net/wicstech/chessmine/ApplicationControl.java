@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author Sergio
  * 
  */
+@SuppressWarnings("ucd")
 public final class ApplicationControl {
 
 	private static ClassPathXmlApplicationContext context;
@@ -33,7 +34,7 @@ public final class ApplicationControl {
 	 * @return
 	 * @throws IOException
 	 */
-	@SuppressWarnings("PMD.LawOfDemeter")
+	@SuppressWarnings({"PMD.LawOfDemeter", "ucd"})
 	public static Parent load(String fxmlFile) throws IOException {
 		synchronized (ApplicationControl.class) {
 			if (context == null) {

@@ -208,14 +208,6 @@ public abstract class AbstractPiece implements Serializable {
 	}
 
 	/**
-	 * @param board
-	 *            the board to set
-	 */
-	public void setBoard(Board board) {
-		this.board = board;
-	}
-
-	/**
 	 * @return the board
 	 */
 	protected Board getBoard() {

@@ -22,6 +22,7 @@ public class PieceFactory {
 	 * @param clazz
 	 * @return
 	 */
+	@SuppressWarnings("ucd")
 	public <T extends AbstractPiece> T newInstance(Class<T> clazz) {
 		for (PieceType pieceType : PieceType.values()) {
 			if (clazz.equals(pieceType.getPieceClass())) {

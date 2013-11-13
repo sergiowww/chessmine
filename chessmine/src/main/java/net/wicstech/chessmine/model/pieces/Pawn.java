@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.wicstech.chessmine.model.BoardCurrentGameData;
 import net.wicstech.chessmine.model.BoardSide;
 import net.wicstech.chessmine.model.Direction;
 import net.wicstech.chessmine.model.IPromotable;
@@ -19,11 +20,14 @@ import org.springframework.util.CollectionUtils;
  * @author Sergio
  * 
  */
-@SuppressWarnings("PMD.ShortClassName")
+@SuppressWarnings({"PMD.ShortClassName", "ucd"})
 public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTimesMoved {
 	private static final int MOVIMENTO_MAX_INICIAL = 2;
 	private static final long serialVersionUID = 6214561026158689018L;
 	private boolean firstMove = true;
+
+	@Autowired
+	private BoardCurrentGameData boardData;
 
 	@Autowired
 	private PieceFactory pieceFactory;
@@ -84,7 +88,7 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 	private Point getAttackMove(BoardSide boardSide, Direction direction, Point pos) {
 		Point point = moveBias(boardSide, direction, pos);
 		if (point != null) {
-			AbstractPiece attackedPiece = getBoard().getPiecesOnBoard().get(point);
+			AbstractPiece attackedPiece = boardData.getPiecesOnBoard().get(point);
 			if (attackedPiece != null && attackedPiece.getBoardSide().equals(boardSide.negate())) {
 				return point;
 			}
@@ -128,7 +132,7 @@ public class Pawn extends AbstractPiece implements IPromotable<Queen>, IUpdateTi
 		List<Point> pointsCollected = moveVertically(givenPoint, boardSide, boardSide.orientation(), mov);
 		if (!CollectionUtils.isEmpty(pointsCollected)) {
 			Point lastPoint = pointsCollected.get(pointsCollected.size() - NumberUtils.INTEGER_ONE);
-			AbstractPiece point = getBoard().getPiecesOnBoard().get(lastPoint);
+			AbstractPiece point = boardData.getPiecesOnBoard().get(lastPoint);
 			if (point != null) {
 				pointsCollected.remove(lastPoint);
 			}

@@ -1,5 +1,7 @@
 package net.wicstech.chessmine.model;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 /**
  * Lado do jogador.
  * 
@@ -9,7 +11,7 @@ package net.wicstech.chessmine.model;
 public enum BoardSide {
 	BLACK("-fx-background-color: brown;", Orientation.FORTH, 7),
 
-	WHITE("-fx-background-color: white;", Orientation.BACK, 0);
+	WHITE("-fx-background-color: white;", Orientation.BACK, NumberUtils.INTEGER_ZERO);
 
 	/**
 	 * Cor do fundo das peças deste lado.

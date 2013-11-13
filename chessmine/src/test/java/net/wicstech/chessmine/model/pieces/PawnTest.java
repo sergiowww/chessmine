@@ -6,16 +6,43 @@ import junit.framework.Assert;
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.BoardSide;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({"/PawnTest.xml", "/common-tests.xml"})
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class PawnTest {
+
+	@Autowired
+	@Qualifier("pawn")
+	private Pawn pawn;
+
+	@Autowired
+	private Board board;
+
+	@Autowired
+	@Qualifier("anotherPawn")
+	private Pawn anotherPawn;
+
+	@Autowired
+	private Knight knight;
+
+	@Before
+	public void setup() {
+		board.getPiecesOnBoard().clear();
+	}
 
 	@Test
 	public void testAcceptMove() {
-		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
-		pawn.setBoard(board);
 		pawn.setCurrentPosition(new Point(1, 6));
 
 		Assert.assertEquals(true, pawn.acceptMove(new Point(1, 5)));
@@ -27,10 +54,7 @@ public class PawnTest {
 
 	@Test
 	public void testAcceptMove1() {
-		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
-		pawn.setBoard(board);
 		pawn.setCurrentPosition(new Point(3, 6));
 		pawn.moved();
 
@@ -42,15 +66,12 @@ public class PawnTest {
 
 	@Test
 	public void testAcceptMove2() {
-		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.WHITE);
-		Board board = new Board();
 		Point pointKnight = new Point(4, 5);
 		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.BLACK);
 		knight.setCurrentPosition(pointKnight);
 		board.getPiecesOnBoard().put(pointKnight, knight);
-		pawn.setBoard(board);
 		pawn.setCurrentPosition(new Point(5, 6));
 		pawn.moved();
 
@@ -62,16 +83,11 @@ public class PawnTest {
 
 	@Test
 	public void testAcceptMove3() {
-		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.BLACK);
-		Board board = new Board();
 		Point pointAnotherPawn = new Point(1, 4);
-		Pawn anotherPawn = new Pawn();
 		anotherPawn.setBoardSide(BoardSide.WHITE);
 		anotherPawn.setCurrentPosition(pointAnotherPawn);
-		anotherPawn.setBoard(board);
 		board.getPiecesOnBoard().put(pointAnotherPawn, anotherPawn);
-		pawn.setBoard(board);
 		Point pointFirstPawn = new Point(1, 3);
 		pawn.setCurrentPosition(pointFirstPawn);
 		board.getPiecesOnBoard().put(pointFirstPawn, pawn);
@@ -83,15 +99,11 @@ public class PawnTest {
 
 	@Test
 	public void testAcceptMove4() {
-		Pawn pawn = new Pawn();
 		pawn.setBoardSide(BoardSide.BLACK);
-		Board board = new Board();
 		Point pointKnight = new Point(1, 2);
-		Knight knight = new Knight();
 		knight.setBoardSide(BoardSide.WHITE);
 		knight.setCurrentPosition(pointKnight);
 		board.getPiecesOnBoard().put(pointKnight, knight);
-		pawn.setBoard(board);
 		pawn.setCurrentPosition(new Point(2, 1));
 		pawn.moved();
 

@@ -13,6 +13,7 @@ import net.wicstech.chessmine.model.Orientation;
  * @author Sergio
  * 
  */
+@SuppressWarnings("ucd")
 public class Queen extends AbstractCollectBehaviorPiece {
 	private static final long serialVersionUID = 4817619455656435077L;
 

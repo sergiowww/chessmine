@@ -12,6 +12,7 @@ import net.wicstech.chessmine.model.MoveAction;
  * Possible Moves: (x-1, y-2) (x-2, y-1) (x-2, y+1) (x-1, y+2) (x+1, y+2) (x+2,
  * y+1) (x+2, y-1) (x+1, y-2)
  */
+@SuppressWarnings("ucd")
 public class Knight extends AbstractPiece {
 	private static final long serialVersionUID = 8949299390635327820L;
 
