@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -28,6 +29,7 @@ public class ApplicationEntryPoint extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		LOG.info("Iniciando aplicação...");
 		Scene scene = new Scene(ApplicationControl.load("MainLayout.fxml"));
+		primaryStage.getIcons().add(new Image(ApplicationEntryPoint.class.getResourceAsStream("/images/logoicone.png")));
 		primaryStage.setTitle("Chess Mine");
 		primaryStage.setMinHeight(500);
 		primaryStage.setHeight(500);

@@ -152,46 +152,6 @@ public abstract class AbstractPiece implements Serializable {
 		this.currentPosition = currentPosition;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		int prime = 31;
-		int result = 1;
-		result = prime * result + ((currentPosition == null) ? 0 : currentPosition.hashCode());
-		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof AbstractPiece)) {
-			return false;
-		}
-		AbstractPiece other = (AbstractPiece) obj;
-		if (currentPosition == null) {
-			if (other.currentPosition != null) {
-				return false;
-			}
-		} else if (!currentPosition.equals(other.currentPosition)) {
-			return false;
-		}
-		return true;
-	}
-
 	/**
 	 * @return the boardSide
 	 */
