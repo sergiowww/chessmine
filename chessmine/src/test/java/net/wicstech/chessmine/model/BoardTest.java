@@ -1,10 +1,21 @@
 package net.wicstech.chessmine.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
+import javax.xml.bind.JAXBException;
+
+import net.wicstech.chessmine.model.pieces.AbstractPiece;
+import net.wicstech.chessmine.model.pieces.Pawn;
+
+import org.apache.commons.lang.SystemUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +31,9 @@ public class BoardTest {
 
 	@Autowired
 	private Board board;
+
+	@Autowired
+	private BoardCurrentGameData gameData;
 
 	@Test
 	public void testKingsPlayerIsInCheck() {
@@ -65,5 +79,70 @@ public class BoardTest {
 		assertEquals(3, board.getPiecesOnBoard().values().size());
 		assertEquals(MoveResult.CHECK_MATE, board.tryMoving(new Point(6, 5), new Point(6, 0)));
 
+	}
+
+	@Test
+	public void testIlegalMoves() {
+
+		if (board.getBoardSidePlaying().equals(BoardSide.BLACK)) {
+			assertEquals(MoveResult.ILEGAL_PLAYER, board.tryMoving(new Point(5, 6), new Point(5, 5)));
+			assertEquals(MoveResult.ILEGAL, board.tryMoving(new Point(0, 1), new Point(1, 2)));
+		} else {
+			assertEquals(MoveResult.ILEGAL_PLAYER, board.tryMoving(new Point(0, 1), new Point(0, 2)));
+			assertEquals(MoveResult.ILEGAL, board.tryMoving(new Point(5, 6), new Point(6, 5)));
+		}
+	}
+
+	@Test
+	public void testAttack() {
+		if (board.getBoardSidePlaying().equals(BoardSide.WHITE)) {
+			assertEquals(MoveResult.LEGAL, board.tryMoving(new Point(6, 6), new Point(6, 5)));
+		}
+		assertEquals(MoveResult.LEGAL, board.tryMoving(new Point(1, 1), new Point(1, 3)));
+		Point pointCapturada = new Point(2, 4);
+		assertEquals(MoveResult.LEGAL, board.tryMoving(new Point(2, 6), pointCapturada));
+		assertTrue(gameData.getPiecesOnBoard().containsKey(pointCapturada));
+		assertFalse(gameData.getCapturedPieces().contains(pointCapturada));
+		AbstractPiece capturada = gameData.getPiecesOnBoard().get(pointCapturada);
+		assertEquals(MoveResult.LEGAL, board.tryMoving(new Point(1, 3), pointCapturada));
+		assertFalse(gameData.getPiecesOnBoard().containsValue(capturada));
+		assertTrue(gameData.getCapturedPieces().contains(capturada));
+	}
+
+	@Test
+	public void testSalvarJogo() throws JAXBException, IOException {
+		File arquivoDestino = new File(SystemUtils.getJavaIoTmpDir(), "board-state.xml");
+		try {
+			Point point_0_2 = new Point(0, 2);
+			Point point_5_5 = new Point(5, 5);
+
+			if (board.getBoardSidePlaying().equals(BoardSide.BLACK)) {
+				board.tryMoving(new Point(0, 1), point_0_2);
+			} else {
+				board.tryMoving(new Point(5, 6), point_5_5);
+			}
+			BoardSide boardSidePlaying = board.getBoardSidePlaying();
+			board.salvar(arquivoDestino);
+			board.reiniciar(null);
+			board.reiniciar(new FileInputStream(arquivoDestino));
+			board.setConfigured(true);
+			assertTrue(board.isConfigured());
+
+			assertEquals(boardSidePlaying, board.getBoardSidePlaying());
+			if (boardSidePlaying.equals(BoardSide.BLACK)) {
+				assertPoint(point_5_5);
+			} else {
+				assertPoint(point_0_2);
+			}
+		} finally {
+			arquivoDestino.delete();
+		}
+
+	}
+
+	private void assertPoint(Point point) {
+		AbstractPiece abstractPiece = board.getPiecesOnBoard().get(point);
+		assertNotNull(abstractPiece);
+		assertTrue(abstractPiece instanceof Pawn);
 	}
 }

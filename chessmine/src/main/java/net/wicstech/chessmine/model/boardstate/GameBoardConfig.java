@@ -15,12 +15,12 @@ public class GameBoardConfig {
 	/**
 	 * Peças do tabuleiro.
 	 */
-	private List<AbstractPiece> pieces;
+	private final List<AbstractPiece> pieces;
 
 	/**
 	 * Jogador que tem a vez.
 	 */
-	private BoardSide boardSide;
+	private final BoardSide boardSide;
 
 	/**
 	 * Construtor do dto.
@@ -42,25 +42,10 @@ public class GameBoardConfig {
 	}
 
 	/**
-	 * @param pieces
-	 *            the pieces to set
-	 */
-	public void setPieces(List<AbstractPiece> pieces) {
-		this.pieces = pieces;
-	}
-
-	/**
 	 * @return the boardSide
 	 */
 	public BoardSide getBoardSide() {
 		return boardSide;
 	}
 
-	/**
-	 * @param boardSide
-	 *            the boardSide to set
-	 */
-	public void setBoardSide(BoardSide boardSide) {
-		this.boardSide = boardSide;
-	}
 }
