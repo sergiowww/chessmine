@@ -6,10 +6,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,7 +33,7 @@ public class BoardCurrentGameData {
 	/**
 	 * Lado que tem a vez de jogar.
 	 */
-	private BoardSide boardSidePlaying = new Random().nextBoolean() ? BoardSide.BLACK : BoardSide.WHITE;
+	private BoardSide boardSidePlaying = RandomUtils.nextBoolean() ? BoardSide.BLACK : BoardSide.WHITE;
 
 	/**
 	 * @return the boardSidePlaying
