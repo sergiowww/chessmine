@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<board-state>
+    <piece>
+        <type>5</type>
+        <color>BLACK</color>
+        <x>3</x>
+        <y>0</y>
+    </piece>
+    <piece>
+        <type>5</type>
+        <color>WHITE</color>
+        <x>3</x>
+        <y>2</y>
+    </piece>
+    <piece>
+        <type>4</type>
+        <color>WHITE</color>
+        <x>6</x>
+        <y>5</y>
+    </piece>
+    <boardSidePlaying>WHITE</boardSidePlaying>
+</board-state>
