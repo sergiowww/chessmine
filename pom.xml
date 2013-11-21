@@ -1,0 +1,207 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.wicstech</groupId>
+	<artifactId>chessmine</artifactId>
+	<version>1.0</version>
+	<name>Chess Mine</name>
+	<description>Chess Game</description>
+	<organization>
+		<name>Wics Tech</name>
+		<url>wicstech.net</url>
+	</organization>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<target>1.7</target>
+					<source>1.7</source>
+				</configuration>
+			</plugin>
+			<!-- C:\Users\Sergio>"%JAVA_HOME%/bin/keytool" -genkeypair -keystore D:\Web\chessmine\src\main\deploy\keystore.jks -alias chess -dname "cn=net.wicstechou=noneo=WicsTechst=DFc=DF" -keypass '244911' -validity 100 -keyalg DSA -keysize 1024 -sigalg SHA1withDSA -->
+			<!-- <plugin> <groupId>com.zenjava</groupId> <artifactId>javafx-maven-plugin</artifactId> <version>2.0</version> <configuration> <mainClass>net.wicstech.chessmine.ApplicationEntryPoint</mainClass> <vendor>wicstech.net</vendor> <certCountry>BR</certCountry> <certDomain>net.wicstech</certDomain> <certState>DF</certState> <identifier>ChessMine</identifier> <keyStoreAlias>chess</keyStoreAlias> <keyStorePassword></keyStorePassword> <allPermissions>true</allPermissions> <keyPassword>123</keyPassword> </configuration> </plugin> -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>cpd</goal>
+							<goal>check</goal>
+							<goal>pmd</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<linkXRef>true</linkXRef>
+					<targetJdk>1.7</targetJdk>
+					<failOnViolation>true</failOnViolation>
+					<verbose>true</verbose>
+					<rulesets>
+						<ruleset>ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>2.0.2</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.2.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>3.2.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.2.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+			<type>jar</type>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>mail</artifactId>
+					<groupId>javax.mail</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jms</artifactId>
+					<groupId>javax.jms</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxtools</artifactId>
+					<groupId>com.sun.jdmk</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jmxri</artifactId>
+					<groupId>com.sun.jmx</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.2.4.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>build-jar</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/fallback</directory>
+					</resource>
+				</resources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.4</version>
+						<configuration>
+							<archive>
+								<index>true</index>
+								<manifest>
+									<addClasspath>true</addClasspath>
+								</manifest>
+								<manifestEntries>
+									<Trusted-Library>true</Trusted-Library>
+									<Application-Name>ChessMine</Application-Name>
+									<Permissions>sandbox</Permissions>
+									<JavaFX-Version>2.2</JavaFX-Version>
+									<JavaFX-Application-Class>net.wicstech.chessmine.ApplicationEntryPoint</JavaFX-Application-Class>
+									<Main-Class>com/javafx/main/Main</Main-Class>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>webstart-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>jnlp</goal> <!-- use jnlp, jnlp-inline or jnlp-single as appropriate -->
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<!--outputDirectory></outputDirectory --> <!-- not required?? -->
+							<!-- Set to true to exclude all transitive dependencies. Default is false. -->
+							<excludeTransitive>false</excludeTransitive>
+							<!-- The path where the libraries are stored within the jnlp structure. not required. by default the libraries are within the working directory -->
+							<libPath>lib</libPath>
+							<!-- [optional] transitive dependencies filter - if omitted, all transitive dependencies are included -->
+							<!-- <dependencies> Note that only groupId and artifactId must be specified here. because of a limitation of the Include/ExcludesArtifactFilter <includes> <include>commons-logging:commons-logging</include> </includes> excludes> <exclude></exclude> <excludes </dependencies> -->
+							<!--resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory --> <!-- default value -->
+							<!-- JNLP generation -->
+							<jnlp>
+								<!-- default values -->
+								<!--inputTemplateResourcePath>${project.basedir}</inputTemplateResourcePath -->
+								<inputTemplate>template.vm</inputTemplate> <!-- relative to inputTemplateResourcePath -->
+								<outputFile>chessmine-1.0.jnlp</outputFile> <!-- defaults to launch.jnlp -->
+								<!-- used to automatically identify the jar containing the main class. -->
+								<!-- this is perhaps going to change -->
+								<mainClass>net.wicstech.chessmine.ApplicationEntryPoint</mainClass>
+							</jnlp>
+							<!-- SIGNING -->
+							<!-- defining this will automatically sign the jar and its dependencies, if necessary -->
+							<sign>
+								<keystore>${basedir}\src\main\deploy\keystore.jks</keystore>
+								<keypass>244911</keypass>  <!-- we need to override passwords easily from the command line. ${keypass} -->
+								<storepass>244911</storepass> <!-- ${storepass} -->
+								<!--storetype>fillme</storetype -->
+								<alias>wicstech.net</alias>
+								<!--validity>fillme</validity -->
+								<!-- only required for generating the keystore -->
+								<!--dnameCn>fillme</dnameCn> <dnameOu>fillme</dnameOu> <dnameO>fillme</dnameO> <dnameL>fillme</dnameL> <dnameSt>fillme</dnameSt> <dnameC>fillme</dnameC -->
+								<verify>true</verify> <!-- verify that the signing operation succeeded -->
+								<!-- KEYSTORE MANAGEMENT -->
+								<!-- <keystoreConfig> <delete>true</delete> delete the keystore <gen>true</gen> optional shortcut to generate the store. </keystoreConfig> -->
+							</sign>
+							<!-- BUILDING PROCESS -->
+							<!-- causes a version attribute to be output in each jar resource element, optional, default is false -->
+							<outputJarVersions>true</outputJarVersions>
+							<!--install>false</install --> <!-- not yet supported -->
+							<verbose>false</verbose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<url>wicstech.net</url>
+	<scm>
+		<developerConnection>http://br.linkedin.com/in/sergioeduardo</developerConnection>
+		<url>https://code.google.com/p/chessmine/</url>
+	</scm>
+</project>
