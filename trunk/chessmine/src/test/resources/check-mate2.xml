@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<board-state>
+<?xml version="1.0" encoding="UTF-8"?>
+<board-state xmlns="http://www.wicstech.net/chessmine/board-state" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wicstech.net/chessmine/board-state ../../main/resources/board-state.xsd ">
     <piece>
         <type>5</type>
-        <color>BLACK</color>
         <x>3</x>
         <y>0</y>
+        <color>BLACK</color>
     </piece>
     <piece>
         <type>5</type>
-        <color>WHITE</color>
         <x>3</x>
         <y>2</y>
+        <color>WHITE</color>
     </piece>
     <piece>
         <type>4</type>
-        <color>WHITE</color>
         <x>6</x>
         <y>5</y>
+        <color>WHITE</color>
     </piece>
     <boardSidePlaying>WHITE</boardSidePlaying>
 </board-state>

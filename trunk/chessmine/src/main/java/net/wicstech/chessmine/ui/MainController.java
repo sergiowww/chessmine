@@ -3,7 +3,6 @@ package net.wicstech.chessmine.ui;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -18,9 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
-
-import javax.xml.bind.JAXBException;
-
 import net.wicstech.chessmine.model.Board;
 
 import org.apache.commons.lang.SystemUtils;
@@ -100,9 +96,9 @@ public class MainController implements Initializable {
 	/**
 	 * Reiniciar o jogo.
 	 * 
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	public void novoJogo() throws FileNotFoundException {
+	public void novoJogo() throws IOException {
 		LOG.info("Reiniciando tabuleiro");
 
 		abrirJogo(null);
@@ -112,9 +108,9 @@ public class MainController implements Initializable {
 	 * Abrir jogo ou carregar um novo.
 	 * 
 	 * @param xmlFile
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
-	private void abrirJogo(File xmlFile) throws FileNotFoundException {
+	private void abrirJogo(File xmlFile) throws IOException {
 		FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000));
 		fadeTransition.setFromValue(1.0f);
 		fadeTransition.setToValue(0.0);
@@ -139,10 +135,8 @@ public class MainController implements Initializable {
 	/**
 	 * Salvar posição das peças.
 	 * 
-	 * @throws IOException
-	 * @throws JAXBException
 	 */
-	public void salvarJogo() throws JAXBException, IOException {
+	public void salvarJogo() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Escolha onde salvar o arquivo");
 		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML File", "*.xml"));

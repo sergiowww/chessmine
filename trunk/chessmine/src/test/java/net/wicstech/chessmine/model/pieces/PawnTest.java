@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
+import java.io.IOException;
 
 import net.wicstech.chessmine.model.Board;
 import net.wicstech.chessmine.model.BoardCurrentGameData;
@@ -126,9 +127,11 @@ public class PawnTest {
 	 * <code>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+\s*Board\s*\[INFO\]\s*from\:\s*java.awt.Point\[x=(\d),y=(\d)\]\s*to\:\s*java.awt.Point\[x=(\d),y=(\d)\]</code>
 	 * <br>
 	 * <code>assertEquals(MoveResult.LEGAL,board.tryMoving(new Point(\1, \2), new Point(\3, \4)));</code>
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testPromotion() {
+	public void testPromotion() throws IOException {
 		board.reiniciar(null);
 		gameData.setBoardSidePlaying(BoardSide.WHITE);
 

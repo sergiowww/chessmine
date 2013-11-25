@@ -1,195 +1,195 @@
 <?xml version="1.0"?>
-<board-state>
+<board-state xmlns="http://www.wicstech.net/chessmine/board-state" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.wicstech.net/chessmine/board-state board-state.xsd ">
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>0</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>1</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>2</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>3</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>4</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>5</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>6</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>6</y>
 		<x>7</x>
+		<y>6</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>2</type>
-		<y>7</y>
 		<x>1</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>2</type>
-		<y>7</y>
 		<x>6</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>3</type>
-		<y>7</y>
 		<x>2</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>3</type>
-		<y>7</y>
 		<x>5</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>4</type>
-		<y>7</y>
 		<x>0</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>4</type>
-		<y>7</y>
 		<x>7</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>5</type>
-		<y>7</y>
 		<x>4</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>6</type>
-		<y>7</y>
 		<x>3</x>
+		<y>7</y>
 		<color>WHITE</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>0</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>1</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>2</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>3</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>4</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>5</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>6</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>1</type>
-		<y>1</y>
 		<x>7</x>
+		<y>1</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>2</type>
-		<y>0</y>
 		<x>1</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>2</type>
-		<y>0</y>
 		<x>6</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>3</type>
-		<y>0</y>
 		<x>2</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>3</type>
-		<y>0</y>
 		<x>5</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>4</type>
-		<y>0</y>
 		<x>0</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>4</type>
-		<y>0</y>
 		<x>7</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>5</type>
-		<y>0</y>
 		<x>4</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 	<piece>
 		<type>6</type>
-		<y>0</y>
 		<x>3</x>
+		<y>0</y>
 		<color>BLACK</color>
 	</piece>
 </board-state>
