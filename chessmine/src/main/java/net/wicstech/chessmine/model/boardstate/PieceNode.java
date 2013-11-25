@@ -3,8 +3,10 @@ package net.wicstech.chessmine.model.boardstate;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 import net.wicstech.chessmine.model.BoardSide;
+import net.wicstech.chessmine.model.Constants;
 import net.wicstech.chessmine.model.PointFactory;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.PieceFactory;
@@ -17,18 +19,19 @@ import net.wicstech.chessmine.model.pieces.PieceFactory;
  */
 @SuppressWarnings("PMD.ShortVariable")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {Constants.TYPE, Constants.COORDENADA_X, Constants.COORDENADA_Y, Constants.COLOR})
 class PieceNode {
 
-	@XmlElement(name = "type")
+	@XmlElement(name = Constants.TYPE, namespace = Constants.CHESS_XMLNS)
 	private int type;
 
-	@XmlElement(name = "color")
+	@XmlElement(name = Constants.COLOR, namespace = Constants.CHESS_XMLNS)
 	private String color;
 
-	@XmlElement(name = "x")
+	@XmlElement(name = Constants.COORDENADA_X, namespace = Constants.CHESS_XMLNS)
 	private int x;
 
-	@XmlElement(name = "y")
+	@XmlElement(name = Constants.COORDENADA_Y, namespace = Constants.CHESS_XMLNS)
 	private int y;
 
 	/**

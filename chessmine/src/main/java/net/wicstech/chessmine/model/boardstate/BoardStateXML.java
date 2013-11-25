@@ -8,17 +8,18 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.wicstech.chessmine.model.BoardSide;
+import net.wicstech.chessmine.model.Constants;
 
 import org.apache.commons.lang.StringUtils;
 
-@XmlRootElement(name = "board-state")
+@XmlRootElement(name = "board-state", namespace = Constants.CHESS_XMLNS)
 @XmlAccessorType(XmlAccessType.FIELD)
 class BoardStateXML {
 
-	@XmlElement(name = "piece")
+	@XmlElement(name = "piece", namespace = Constants.CHESS_XMLNS)
 	private List<PieceNode> pieceNodes;
 
-	@XmlElement(name = "boardSidePlaying")
+	@XmlElement(name = "boardSidePlaying", namespace = Constants.CHESS_XMLNS)
 	private String boardSidePlaying;
 
 	/**

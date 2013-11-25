@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.xml.bind.JAXBException;
-
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.Pawn;
 
@@ -74,7 +72,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testCheckMate2() {
+	public void testCheckMate2() throws IOException {
 		board.reiniciar(BoardTest.class.getResourceAsStream("/check-mate2.xml"));
 		assertEquals(3, board.getPiecesOnBoard().values().size());
 		assertEquals(MoveResult.CHECK_MATE, board.tryMoving(new Point(6, 5), new Point(6, 0)));
@@ -110,7 +108,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testSalvarJogo() throws JAXBException, IOException {
+	public void testSalvarJogo() throws IOException {
 		File arquivoDestino = new File(SystemUtils.getJavaIoTmpDir(), "board-state.xml");
 		try {
 			Point point_0_2 = new Point(0, 2);

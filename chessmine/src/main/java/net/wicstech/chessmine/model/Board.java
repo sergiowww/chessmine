@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.JAXBException;
 
 import net.wicstech.chessmine.model.boardstate.BoardState;
 import net.wicstech.chessmine.model.boardstate.GameBoardConfig;
@@ -49,17 +48,21 @@ public class Board {
 
 	/**
 	 * Carrega a posição inicial do tabuleiro.
+	 * 
+	 * @throws IOException
 	 */
 	@SuppressWarnings({"PMD.DataflowAnomalyAnalysis", "ucd"})
 	@PostConstruct
-	public void initialSetup() {
+	public void initialSetup() throws IOException {
 		piecesOnInitialPosition();
 	}
 
 	/**
 	 * Alocar peças na posição inicial.
+	 * 
+	 * @throws IOException
 	 */
-	private void piecesOnInitialPosition() {
+	private void piecesOnInitialPosition() throws IOException {
 		setPiecesOnBoard(boardConfigXML.getPiecesInitial());
 	}
 
@@ -149,8 +152,9 @@ public class Board {
 	 * Reiniciar o jogo.
 	 * 
 	 * @param xmlFile
+	 * @throws IOException
 	 */
-	public void reiniciar(InputStream xmlFile) {
+	public void reiniciar(InputStream xmlFile) throws IOException {
 		getPiecesOnBoard().clear();
 		boardData.getCapturedPieces().clear();
 		setConfigured(false);
@@ -208,10 +212,8 @@ public class Board {
 	 * 
 	 * @return
 	 * 
-	 * @throws IOException
-	 * @throws JAXBException
 	 */
-	public String salvar(File arquivoDestino) throws JAXBException, IOException {
+	public String salvar(File arquivoDestino) {
 		return boardConfigXML.savePieces(arquivoDestino);
 	}
 
