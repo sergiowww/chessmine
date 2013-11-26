@@ -9,7 +9,12 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+import net.wicstech.chessmine.model.boardstate.BoardStateReadException;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.Pawn;
 
@@ -21,9 +26,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.xml.sax.SAXParseException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/testApplicationContext.xml")
+@ContextConfiguration("/common-tests.xml")
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class BoardTest {
 
@@ -142,5 +148,33 @@ public class BoardTest {
 		AbstractPiece abstractPiece = board.getPiecesOnBoard().get(point);
 		assertNotNull(abstractPiece);
 		assertTrue(abstractPiece instanceof Pawn);
+	}
+
+	@Test
+	public void testValidXML() throws URISyntaxException {
+
+		File xmlInvalido = new File(SystemUtils.getJavaIoTmpDir(), "xmlNaoExiste.xml");
+		assertFalse(board.isValidXMLConfig(xmlInvalido));
+		assertFalse(board.isValidXMLConfig(null));
+	}
+
+	@Test(expected = BoardStateReadException.class)
+	public void testInvalidXML() throws URISyntaxException {
+		URL resource = BoardTest.class.getResource("/invalid.xml");
+		Path path = Paths.get(resource.toURI());
+		try {
+			board.isValidXMLConfig(path.toFile());
+		} catch (BoardStateReadException e) {
+			assertTrue(e.getCause() instanceof SAXParseException);
+			assertEquals("cvc-minInclusive-valid: Value '-1' is not facet-valid with respect to minInclusive '0' for type 'Coord'.", e.getCause().getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void testValidXML2() throws URISyntaxException {
+		URL resource = BoardTest.class.getResource("/check-mate2.xml");
+		Path path = Paths.get(resource.toURI());
+		assertTrue(board.isValidXMLConfig(path.toFile()));
 	}
 }

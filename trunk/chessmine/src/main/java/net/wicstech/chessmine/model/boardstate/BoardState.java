@@ -6,20 +6,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import net.wicstech.chessmine.model.BoardCurrentGameData;
 import net.wicstech.chessmine.model.pieces.AbstractPiece;
 import net.wicstech.chessmine.model.pieces.PieceFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
 
@@ -32,11 +34,21 @@ import org.xml.sax.SAXException;
 @Service
 public class BoardState {
 
+	private static final Log LOG = LogFactory.getLog(BoardState.class);
+
 	@Autowired
 	private PieceFactory pieceFactory;
 
 	@Autowired
 	private BoardCurrentGameData boardData;
+
+	@Autowired
+	@Qualifier("schema")
+	private Schema schema;
+
+	@Autowired
+	@Qualifier("validator")
+	private Validator validator;
 
 	/**
 	 * Retorna as peças inicialmente posicionadas.
@@ -71,14 +83,32 @@ public class BoardState {
 	 * @param inputStream
 	 * @return
 	 */
-	@SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
 	private BoardStateXML loadPieceNodes(InputStream inputStream) {
 		try (InputStream xmlFile = inputStream) {
 			JAXBContext context = JAXBContext.newInstance(BoardStateXML.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			return (BoardStateXML) unmarshaller.unmarshal(xmlFile);
 		} catch (JAXBException | IOException e) {
-			throw new RuntimeException(e);
+			throw new BoardStateReadException(e);
+		}
+	}
+
+	/**
+	 * Verifica se o XML é válido.
+	 * 
+	 * @param xmlFile
+	 * @return
+	 */
+	public boolean isValidXMLConfig(File xmlFile) {
+		if (xmlFile == null || !xmlFile.exists()) {
+			return false;
+		}
+		try {
+			validator.validate(new StreamSource(xmlFile));
+			return true;
+		} catch (SAXException | IOException e) {
+			LOG.error(e, e);
+			throw new BoardStateReadException("XML Inválido", e);
 		}
 	}
 
@@ -88,14 +118,11 @@ public class BoardState {
 	 * @param arquivoDestino
 	 * @return
 	 */
-	@SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.AvoidThrowingRawExceptionTypes"})
+	@SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops"})
 	public String savePieces(File arquivoDestino) {
-		try (InputStream boardStateXsd = getClass().getResourceAsStream("/board-state.xsd")) {
+		try {
 			JAXBContext jaxb = JAXBContext.newInstance(BoardStateXML.class);
 			Marshaller marshaller = jaxb.createMarshaller();
-
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			Schema schema = schemaFactory.newSchema(new StreamSource(boardStateXsd));
 
 			marshaller.setSchema(schema);
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -111,8 +138,8 @@ public class BoardState {
 			}
 			marshaller.marshal(boardStateXML, arquivoDestino);
 			return arquivoDestino.getPath();
-		} catch (JAXBException | IOException | SAXException e) {
-			throw new RuntimeException(e);
+		} catch (JAXBException | IOException e) {
+			throw new BoardStateReadException(e);
 		}
 	}
 

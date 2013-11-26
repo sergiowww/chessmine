@@ -217,6 +217,15 @@ public class Board {
 		return boardConfigXML.savePieces(arquivoDestino);
 	}
 
+	/**
+	 * @see BoardState#isValidXMLConfig(File)
+	 * @param xmlFile
+	 * @return
+	 */
+	public boolean isValidXMLConfig(File xmlFile) {
+		return boardConfigXML.isValidXMLConfig(xmlFile);
+	}
+
 	public BoardSide getBoardSidePlaying() {
 		return boardData.getBoardSidePlaying();
 	}
