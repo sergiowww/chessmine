@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 	<context:annotation-config />
 	<context:component-scan base-package="net.wicstech.chessmine" />
+	
+	
+	<bean id="schemaFactory" class="javax.xml.validation.SchemaFactory" factory-method="newInstance">
+		<constructor-arg>
+			<util:constant static-field="javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI"/>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="schema" class="javax.xml.validation.Schema" factory-bean="schemaFactory" factory-method="newSchema">
+		<constructor-arg>
+			<bean class="javax.xml.transform.stream.StreamSource">
+				<constructor-arg type="java.io.InputStream" value="board-state.xsd"/>
+			</bean>
+		</constructor-arg>
+	</bean>
+	<bean id="validator" class="javax.xml.validation.Validator" factory-bean="schema" factory-method="newValidator"/>
 </beans>

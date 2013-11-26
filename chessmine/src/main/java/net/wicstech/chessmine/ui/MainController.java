@@ -119,7 +119,7 @@ public class MainController implements Initializable {
 
 		gameBoard.getChildren().clear();
 		FileInputStream fis = null;
-		if (xmlFile != null && xmlFile.exists()) {
+		if (board.isValidXMLConfig(xmlFile)) {
 			fis = new FileInputStream(xmlFile);
 		}
 		board.reiniciar(fis);
