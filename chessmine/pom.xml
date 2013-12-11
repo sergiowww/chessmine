@@ -133,16 +133,4 @@
 		<developerConnection>http://br.linkedin.com/in/sergioeduardo</developerConnection>
 		<url>https://code.google.com/p/chessmine/</url>
 	</scm>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>sonatype.snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<releases>
-				<updatePolicy>daily</updatePolicy>
-			</releases>
-			<snapshots>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 </project>
