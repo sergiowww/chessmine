@@ -36,7 +36,7 @@ public class SquarePane extends TilePane {
 		this.indicePaineis = indicePaineis;
 		this.board = board;
 		this.squarePosition = squarePosition;
-		setStyle(BooleanUtils.toString(alternarCorFundo, BoardSide.WHITE.color(), BoardSide.BLACK.color()));
+		setStyle("-fx-background-color: " + BooleanUtils.toString(alternarCorFundo, BoardSide.WHITE.color(), BoardSide.BLACK.color()));
 		setOrientation(Orientation.HORIZONTAL);
 		setAlignment(Pos.CENTER);
 
