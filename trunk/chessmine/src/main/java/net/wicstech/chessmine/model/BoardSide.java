@@ -9,9 +9,9 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 public enum BoardSide {
-	BLACK(Orientation.FORTH, 7),
+	BLACK(Orientation.FORTH, 7, "brown"),
 
-	WHITE(Orientation.BACK, NumberUtils.INTEGER_ZERO);
+	WHITE(Orientation.BACK, NumberUtils.INTEGER_ZERO, "white");
 
 	/**
 	 * Direção do ataque das peças que estão deste lado.
@@ -22,17 +22,19 @@ public enum BoardSide {
 	 * Última casa que as peças deste lado tendem a ir.
 	 */
 	private int ultimaCasa;
+	private String color;
 
-	private BoardSide(Orientation orientation, int ultimaCasa) {
+	private BoardSide(Orientation orientation, int ultimaCasa, String color) {
 		this.orientation = orientation;
 		this.ultimaCasa = ultimaCasa;
+		this.color = color;
 	}
 
 	/**
 	 * @return the backgroundColor
 	 */
 	public String color() {
-		return name().toLowerCase();
+		return color;
 	}
 
 	/**
