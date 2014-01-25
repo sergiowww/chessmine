@@ -9,14 +9,9 @@ import org.apache.commons.lang.math.NumberUtils;
  * 
  */
 public enum BoardSide {
-	BLACK("-fx-background-color: brown;", Orientation.FORTH, 7),
+	BLACK(Orientation.FORTH, 7),
 
-	WHITE("-fx-background-color: white;", Orientation.BACK, NumberUtils.INTEGER_ZERO);
-
-	/**
-	 * Cor do fundo das peças deste lado.
-	 */
-	private String backgroundColor;
+	WHITE(Orientation.BACK, NumberUtils.INTEGER_ZERO);
 
 	/**
 	 * Direção do ataque das peças que estão deste lado.
@@ -28,8 +23,7 @@ public enum BoardSide {
 	 */
 	private int ultimaCasa;
 
-	private BoardSide(String backgroundColor, Orientation orientation, int ultimaCasa) {
-		this.backgroundColor = backgroundColor;
+	private BoardSide(Orientation orientation, int ultimaCasa) {
 		this.orientation = orientation;
 		this.ultimaCasa = ultimaCasa;
 	}
@@ -38,7 +32,7 @@ public enum BoardSide {
 	 * @return the backgroundColor
 	 */
 	public String color() {
-		return backgroundColor;
+		return name().toLowerCase();
 	}
 
 	/**
