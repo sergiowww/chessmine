@@ -65,25 +65,37 @@ public class SquarePane extends TilePane {
 		Point currentPosition = (Point) dragboard.getContent(UIConstants.POINT_CURRENT_POSITION);
 		MoveResult procceedMove = board.tryMoving(currentPosition, squarePosition);
 
-		if (MoveResult.LEGAL.equals(procceedMove) || MoveResult.CHECK_MATE.equals(procceedMove)) {
-			SquarePane quadradoOrigem = indicePaineis.get(currentPosition);
-			PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
-			quadradoOrigem.getChildren().remove(pieceViewOrigem);
-			painelMensagem.setText(getMensagemAguardando());
-			setOrPromotePieceView(pieceViewOrigem);
-		}
-		if (MoveResult.CHECK_MATE.equals(procceedMove)) {
+		switch (procceedMove) {
+		case CHECK_MATE:
+			updateBoard(currentPosition);
 			painelMensagem.setText("O jogador " + board.getBoardSidePlaying().negate() + " ganhou a partida, CHECK MATE!");
-		}
-		if (MoveResult.ILEGAL.equals(procceedMove)) {
+			break;
+
+		case LEGAL:
+			updateBoard(currentPosition);
+			painelMensagem.setText(getMensagemAguardando());
+			break;
+
+		case ILEGAL:
 			painelMensagem.setText("Movimento inválido!");
-		}
-		if (MoveResult.KING_IN_CHECK.equals(procceedMove)) {
+			break;
+
+		case KING_IN_CHECK:
 			painelMensagem.setText("O seu movimento deixou seu rei em cheque!");
-		}
-		if (MoveResult.ILEGAL_PLAYER.equals(procceedMove)) {
+			break;
+
+		case ILEGAL_PLAYER:
 			painelMensagem.setText("Não é sua vez de jogar!");
+			break;
+
 		}
+	}
+
+	private void updateBoard(Point currentPosition) {
+		SquarePane quadradoOrigem = indicePaineis.get(currentPosition);
+		PieceView pieceViewOrigem = quadradoOrigem.getPieceView();
+		quadradoOrigem.getChildren().remove(pieceViewOrigem);
+		setOrPromotePieceView(pieceViewOrigem);
 	}
 
 	private void setOrPromotePieceView(PieceView pieceViewOrigem) {
