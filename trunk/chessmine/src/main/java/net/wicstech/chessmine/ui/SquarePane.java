@@ -59,7 +59,8 @@ public class SquarePane extends TilePane {
 
 		});
 	}
-
+	
+	@SuppressWarnings({"PMD.SwitchStmtsShouldHaveDefault"})
 	private void droppedPiece(DragEvent event) {
 		Dragboard dragboard = event.getDragboard();
 		Point currentPosition = (Point) dragboard.getContent(UIConstants.POINT_CURRENT_POSITION);
